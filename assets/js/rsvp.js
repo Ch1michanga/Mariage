@@ -24,25 +24,19 @@ form?.addEventListener('submit', async (e)=>{
   }
 
   try{
-    const res = await fetch(FORM_ENDPOINT, {
-      method: 'POST',
-      // IMPORTANT : ne PAS fixer Content-Type manuellement -> le navigateur mettra
-      // application/x-www-form-urlencoded par défaut pour URLSearchParams
-      body: params
-    });
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const text = await res.getContentText?.() || (await res.text?.()) || '';
-    // On tente JSON d'abord, sinon on considère ok si 200
-    let out = null;
-    try { out = JSON.parse(text); } catch(_) {}
-    if (out?.ok || res.ok){
-      setStatus('success', 'Merci ! Votre réponse a bien été enregistrée.');
-      form.reset();
-    } else {
-      throw new Error(out?.message || 'Erreur inconnue');
-    }
-  }catch(err){
-    setStatus('error', 'Erreur réseau : ' + String(err));
-    console.error(err);
+  const res = await fetch(FORM_ENDPOINT, { method: 'POST', body: params });
+  const text = await res.text();
+  let out = null;
+  try { out = JSON.parse(text); } catch(_) {}
+
+  if (res.ok && out?.ok === true && out?.written === true) {
+    setStatus('success', 'Merci ! Votre réponse a bien été enregistrée.');
+    form.reset();
+  } else {
+    throw new Error('Réponse invalide: ' + (text || res.status));
   }
+}catch(err){
+  setStatus('error', 'Erreur réseau : ' + String(err));
+  console.error(err);
+}
 });
