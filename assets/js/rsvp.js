@@ -1,4 +1,4 @@
-const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxz39yOCZ7UFKk-2GzlGqvXdWSpDsLge8pDRvChf4_ro0B3MXG-cgElrCxguQiGQEPTOw/exec';
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwYsNYI3WAx5r8imQu6X9ZhjB1nG0QMyAOuMACdG1BCeKKc-MiBnhP5Zs9bSL06V1WRJw/exec';
 
 const form = document.getElementById('rsvp-form');
 const statusBox = document.getElementById('rsvp-status');
@@ -13,31 +13,27 @@ form?.addEventListener('submit', async (e)=>{
   setStatus('', 'Envoi en cours…');
 
   const fd = new FormData(form);
-  // Convertir en x-www-form-urlencoded pour éviter le preflight CORS
+  // convertir en x-www-form-urlencoded pour éviter le preflight CORS
   const params = new URLSearchParams();
   for (const [k,v] of fd.entries()) params.append(k, v);
 
-  // Validation minimale
   if(!params.get('nom') || !params.get('email')){
     setStatus('error', 'Merci d’indiquer au moins votre nom et votre email.');
     return;
   }
 
   try{
-  const res = await fetch(FORM_ENDPOINT, { method: 'POST', body: params });
-  const text = await res.text();
-  let out = null;
-  try { out = JSON.parse(text); } catch(_) {}
-
-  if (res.ok && out?.ok === true && out?.written === true) {
-    setStatus('success', 'Merci ! Votre réponse a bien été enregistrée.');
-    form.reset();
-  } else {
-    throw new Error('Réponse invalide: ' + (text || res.status));
+    const res = await fetch(FORM_ENDPOINT, { method: 'POST', body: params });
+    const text = await res.text();
+    let out = null; try { out = JSON.parse(text); } catch(_){}
+    if (res.ok && out?.ok === true && out?.written === true){
+      setStatus('success', 'Merci ! Votre réponse a bien été enregistrée.');
+      form.reset();
+    } else {
+      throw new Error('Réponse invalide: ' + (text || res.status));
+    }
+  }catch(err){
+    setStatus('error', 'Erreur réseau : ' + String(err));
+    console.error(err);
   }
-}catch(err){
-  setStatus('error', 'Erreur réseau : ' + String(err));
-  console.error(err);
-}
 });
-
