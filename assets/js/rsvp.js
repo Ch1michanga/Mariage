@@ -1,4 +1,4 @@
-const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx27TlMfIeYc4NqD6Ojj7NjaTd2ksUuwjSRABscFWAi4LjZQhhzsOiy2JDE90FY3SJB2A/exec';
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxz39yOCZ7UFKk-2GzlGqvXdWSpDsLge8pDRvChf4_ro0B3MXG-cgElrCxguQiGQEPTOw/exec';
 
 const form = document.getElementById('rsvp-form');
 const statusBox = document.getElementById('rsvp-status');
@@ -40,3 +40,4 @@ form?.addEventListener('submit', async (e)=>{
   console.error(err);
 }
 });
+
