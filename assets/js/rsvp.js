@@ -1,4 +1,4 @@
-const FORM_ENDPOINT = 'YOUR_SCRIPT_URL_HERE'; // à remplacer après Apps Script
+const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx27TlMfIeYc4NqD6Ojj7NjaTd2ksUuwjSRABscFWAi4LjZQhhzsOiy2JDE90FY3SJB2A/exec'; // à remplacer après Apps Script
 
 const form = document.getElementById('rsvp-form');
 const statusBox = document.getElementById('rsvp-status');
@@ -35,4 +35,5 @@ form?.addEventListener('submit', async (e)=>{
     setStatus('error', 'Oups, une erreur est survenue. Réessayez plus tard.');
     console.error(err);
   }
+
 });
