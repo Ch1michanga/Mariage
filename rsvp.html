@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css" />
   <script defer src="assets/js/main.js"></script>
-  <script defer src="assets/js/rsvp.js"></script>
+  <script defer src="assets/js/rsvp.js?v=2"></script>
 </head>
 <body>
   <header></header>
@@ -18,7 +18,7 @@
       <p class="lead">Merci de confirmer votre présence.</p>
       <div id="rsvp-status" class="notice" aria-live="polite"></div>
       <form id="rsvp-form">
-        <label>Nom complet *</label>
+        <label>Nom et Prénom *</label>
         <input name="nom" required />
         <label>Email *</label>
         <input name="email" type="email" required />
@@ -28,6 +28,8 @@
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
+          <option value="5">4</option>
+          <option value="6">4</option>
         </select>
         <label>Présence</label>
         <select name="presence">
@@ -45,4 +47,5 @@
   </main>
   <footer></footer>
 </body>
+
 </html>
