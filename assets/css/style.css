@@ -180,11 +180,11 @@ button{
 
 @media (prefers-reduced-motion: reduce){
   .reveal{transition:none}
-/* Fond photos défilantes */
+/* Fond photos défilantes (z-index fixés au-dessus du fond du body) */
 .bg-slideshow{
   position:fixed;
   inset:0;
-  z-index:-2;
+  z-index:0;                 /* au-dessus du fond du body */
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
@@ -194,8 +194,13 @@ button{
 .bg-overlay{
   position:fixed;
   inset:0;
-  z-index:-1;
-  background:rgba(245,237,227,0.85); /* voile beige pour lisibilité */
+  z-index:1;                 /* par-dessus la photo, sous le contenu */
+  background:rgba(245,237,227,0.85);
   pointer-events:none;
 }
 
+/* Assure que le contenu passe bien AU-DESSUS du fond */
+header, main, footer{
+  position:relative;
+  z-index:2;
+}
