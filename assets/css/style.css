@@ -7,9 +7,9 @@
   --charcoal:#2F2F2F;      /* texte principal lisible */
   --shadow:0 12px 30px rgba(0,0,0,.06);
 
-  /* Nuances “vert provençal” (nouveau système bouton) */
-  --green:#A6B49C;         /* bouton & link par défaut (pastel) */
-  --green-dark:#7E8C73;    /* hover/focus plus soutenu */
+  /* Nuances “vert provençal” */
+  --green:#A6B49C;         /* hover/focus vert pastel */
+  --green-dark:#7E8C73;    /* non utilisé ici mais dispo si besoin */
 
   /* Texture papier très légère (peut être désactivée) */
   --paper:
@@ -23,18 +23,16 @@ html,body{height:100%}
 
 body{
   margin:0;
-  /* Typo: textes lisibles (Inter), rendu net */
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
   color:var(--charcoal);
   background:var(--beige);
-  background-image: var(--paper);      /* commente cette ligne pour un fond lisse */
+  background-image: var(--paper);
   background-blend-mode:multiply;
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
 
-/* Titres élégants (Playfair) pour le “ton mariage” */
 h1,h2,h3{
   font-family:"Playfair Display", Georgia, "Times New Roman", serif;
   margin:0 0 .6rem;
@@ -42,51 +40,61 @@ h1,h2,h3{
 }
 p{margin:.4rem 0 1rem}
 
-/* ===== Navigation translucide, collée en haut ===== */
+/* ===== Navigation ===== */
 .site-nav{
   position:sticky; top:0; z-index:20;
   display:flex; align-items:center; justify-content:space-between;
   padding:1rem 1.25rem;
-  background:rgba(255,253,248,.8);     /* ivoire translucide → élégant sur bannière */
-  backdrop-filter:saturate(1.2) blur(6px);  /* léger flou */
+  background:rgba(255,253,248,.8);
+  backdrop-filter:saturate(1.2) blur(6px);
   border-bottom:1px solid rgba(0,0,0,.05);
 }
 .brand{
-  font-family:"Playfair Display"; font-size:1.25rem;
-  text-decoration:none; color:var(--charcoal); letter-spacing:.04em
+  font-family:"Playfair Display";
+  font-size:1.25rem;
+  text-decoration:none;
+  color:var(--charcoal);
+  letter-spacing:.04em;
 }
 .nav-links{display:flex; gap:.75rem; list-style:none; margin:0; padding:0}
 
-/* ===== Boutons & liens unifiés (vert pastel → vert soutenu au hover) =====
-   - S’applique à tous les <a>, .cta, boutons de nav, etc.
-   - Plus besoin des anciens styles noir/doré. */
+/* === Boutons beige → vert pastel au survol === */
 a, button, .cta, .nav-links a, .nav-links .btn{
   display:inline-block;
   padding:.6rem 1.1rem;
   border-radius:999px;
-  border:1px solid var(--green);
-  background:var(--green);
-  color:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  background:var(--beige);      /* même couleur que le fond du site */
+  color:var(--charcoal);
   text-decoration:none;
   transition:background .25s ease, border-color .25s ease, color .25s ease;
 }
+
+/* Survol : vert pastel et texte blanc */
 a:hover, button:hover, .cta:hover, .nav-links a:hover, .nav-links .btn:hover{
-  background:var(--green-dark);
-  border-color:var(--green-dark);
+  background:var(--green);
+  border-color:var(--green);
   color:#fff;
 }
+
+/* Focus clavier */
 a:focus-visible, button:focus-visible, .cta:focus-visible{
-  outline:2px solid var(--green-dark);
+  outline:2px solid var(--green);
   outline-offset:2px;
 }
 
-/* ===== Layout & sections réutilisables ===== */
+/* ===== Layout & sections ===== */
 .container{max-width:1100px; margin:0 auto; padding:2rem 1.25rem}
 .section{padding:3rem 0}
 .section-title{margin-bottom:1.25rem}
 .kicker{
-  display:block; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--olive); font-weight:600; font-size:.85rem; margin-bottom:.25rem;
+  display:block;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--olive);
+  font-weight:600;
+  font-size:.85rem;
+  margin-bottom:.25rem;
 }
 .lead{font-size:1.125rem; color:var(--olive)}
 
@@ -102,7 +110,6 @@ a:focus-visible, button:focus-visible, .cta:focus-visible{
 .grid-2{grid-template-columns:repeat(2,1fr)}
 .grid-3{grid-template-columns:repeat(3,1fr)}
 
-/* Séparateur ornemental discret pour rythmer les sections */
 hr.ornament{
   --line:rgba(0,0,0,.08);
   border:0; height:1px; background:
@@ -110,7 +117,7 @@ hr.ornament{
   margin:2rem auto; max-width:320px;
 }
 
-/* ===== Bannière d’accueil ===== */
+/* ===== Bannière ===== */
 .banner{
   position:relative;
   padding:5rem 1.25rem;
@@ -122,20 +129,26 @@ hr.ornament{
 .banner h1{font-size:clamp(2rem, 4vw, 3rem)}
 .banner .lead{max-width:60ch; margin:0 auto}
 
-/* Pastille discrète pour contexte (“Provence · 2026”) */
 .badge{
-  display:inline-block; padding:.25rem .6rem; border:1px solid rgba(0,0,0,.1);
-  border-radius:999px; font-size:.8rem; color:var(--olive); background:#fffefb
+  display:inline-block;
+  padding:.25rem .6rem;
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:999px;
+  font-size:.8rem;
+  color:var(--olive);
+  background:#fffefb;
 }
 
 /* ===== Formulaires ===== */
 form label{display:block; margin:.5rem 0 .25rem}
 input,select,textarea{
   width:100%; padding:.7rem .8rem;
-  border:1px solid rgba(0,0,0,.12); border-radius:12px; background:#fff
+  border:1px solid rgba(0,0,0,.12);
+  border-radius:12px; background:#fff;
 }
 button{
-  cursor:pointer; border-radius:12px; /* on garde la pastille, déjà stylée plus haut */
+  cursor:pointer;
+  border-radius:12px;
 }
 .notice{padding:.75rem 1rem; border-radius:12px; background:#fff4da; border:1px solid #f2e1b9}
 .success{background:#e9f8ef; border-color:#bfe8cb}
@@ -143,10 +156,8 @@ button{
 .small{font-size:.9rem; color:var(--olive)}
 .tiny{font-size:.8rem; color:var(--olive)}
 
-/* ===== Footer ===== */
 .site-footer{padding:2rem 1.25rem; text-align:center; color:var(--olive)}
 
-/* ===== Animations de révélation (à activer en JS) ===== */
 .reveal{opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease}
 .reveal.is-visible{opacity:1; transform:none}
 
@@ -154,16 +165,19 @@ button{
 @media (max-width: 820px){
   .grid-2{grid-template-columns:1fr}
   .grid-3{grid-template-columns:1fr 1fr}
-  .nav-toggle{display:block; background:transparent; border:0; font-size:1.25rem}
+  /* ❌ Suppression du bouton ☰ (menu toggle inutilisé) */
+  .nav-toggle{display:none !important}
   .nav-links{
-    position:absolute; right:1rem; top:64px; background:var(--ivory);
-    padding:1rem; border-radius:14px; box-shadow:var(--shadow);
-    flex-direction:column; display:none
+    position:static;
+    background:none;
+    padding:0;
+    border:0;
+    box-shadow:none;
+    flex-direction:row;
+    display:flex;
   }
-  .nav-links.open{display:flex}
 }
 
-/* Respect des préférences d’accessibilité */
 @media (prefers-reduced-motion: reduce){
   .reveal{transition:none}
 }
