@@ -1,17 +1,16 @@
 /* ===== Thème beige / provençal chic ===== */
 :root{
-  /* Palette raffinée et cohérente */
-  --beige:#F5EDE3;         /* fond global chaleureux */
-  --ivory:#FFFDF8;         /* cartes et surfaces claires */
-  --olive:#6B705C;         /* accents/texte secondaire discret */
-  --charcoal:#2F2F2F;      /* texte principal lisible */
+  --beige:#F5EDE3;        /* fond global chaleureux */
+  --ivory:#FFFDF8;        /* cartes claires */
+  --olive:#6B705C;        /* accents */
+  --charcoal:#2F2F2F;     /* texte principal */
   --shadow:0 12px 30px rgba(0,0,0,.06);
 
-  /* Nuances “vert provençal” */
-  --green:#A6B49C;         /* hover/focus vert pastel */
-  --green-dark:#7E8C73;    /* non utilisé ici mais dispo si besoin */
+  /* Vert “Provence” */
+  --green:#A6B49C;        /* hover */
+  --green-dark:#7E8C73;
 
-  /* Texture papier très légère (peut être désactivée) */
+  /* Texture papier (désactivable en commentant la ligne du body) */
   --paper:
     radial-gradient(ellipse at 20% 20%, rgba(0,0,0,.02), transparent 40%),
     radial-gradient(ellipse at 80% 0%, rgba(0,0,0,.02), transparent 40%),
@@ -26,7 +25,7 @@ body{
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
   color:var(--charcoal);
   background:var(--beige);
-  background-image: var(--paper);
+  background-image: var(--paper);       /* commentez pour fond lisse */
   background-blend-mode:multiply;
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
@@ -58,26 +57,22 @@ p{margin:.4rem 0 1rem}
 }
 .nav-links{display:flex; gap:.75rem; list-style:none; margin:0; padding:0}
 
-/* === Boutons beige → vert pastel au survol === */
+/* ===== Boutons beige → vert au hover ===== */
 a, button, .cta, .nav-links a, .nav-links .btn{
   display:inline-block;
   padding:.6rem 1.1rem;
   border-radius:999px;
   border:1px solid rgba(0,0,0,.08);
-  background:var(--beige);      /* même couleur que le fond du site */
+  background:var(--beige);     /* au repos : ton du fond */
   color:var(--charcoal);
   text-decoration:none;
   transition:background .25s ease, border-color .25s ease, color .25s ease;
 }
-
-/* Survol : vert pastel et texte blanc */
 a:hover, button:hover, .cta:hover, .nav-links a:hover, .nav-links .btn:hover{
   background:var(--green);
   border-color:var(--green);
   color:#fff;
 }
-
-/* Focus clavier */
 a:focus-visible, button:focus-visible, .cta:focus-visible{
   outline:2px solid var(--green);
   outline-offset:2px;
@@ -88,13 +83,8 @@ a:focus-visible, button:focus-visible, .cta:focus-visible{
 .section{padding:3rem 0}
 .section-title{margin-bottom:1.25rem}
 .kicker{
-  display:block;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:var(--olive);
-  font-weight:600;
-  font-size:.85rem;
-  margin-bottom:.25rem;
+  display:block; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--olive); font-weight:600; font-size:.85rem; margin-bottom:.25rem;
 }
 .lead{font-size:1.125rem; color:var(--olive)}
 
@@ -130,26 +120,17 @@ hr.ornament{
 .banner .lead{max-width:60ch; margin:0 auto}
 
 .badge{
-  display:inline-block;
-  padding:.25rem .6rem;
-  border:1px solid rgba(0,0,0,.1);
-  border-radius:999px;
-  font-size:.8rem;
-  color:var(--olive);
-  background:#fffefb;
+  display:inline-block; padding:.25rem .6rem; border:1px solid rgba(0,0,0,.1);
+  border-radius:999px; font-size:.8rem; color:var(--olive); background:#fffefb
 }
 
 /* ===== Formulaires ===== */
 form label{display:block; margin:.5rem 0 .25rem}
 input,select,textarea{
   width:100%; padding:.7rem .8rem;
-  border:1px solid rgba(0,0,0,.12);
-  border-radius:12px; background:#fff;
+  border:1px solid rgba(0,0,0,.12); border-radius:12px; background:#fff
 }
-button{
-  cursor:pointer;
-  border-radius:12px;
-}
+button{ cursor:pointer; border-radius:12px }
 .notice{padding:.75rem 1rem; border-radius:12px; background:#fff4da; border:1px solid #f2e1b9}
 .success{background:#e9f8ef; border-color:#bfe8cb}
 .error{background:#fdecea; border-color:#f5c0ba}
@@ -161,33 +142,13 @@ button{
 .reveal{opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease}
 .reveal.is-visible{opacity:1; transform:none}
 
-/* ===== Responsive ===== */
-@media (max-width: 820px){
-  .grid-2{grid-template-columns:1fr}
-  .grid-3{grid-template-columns:1fr 1fr}
-  /* ❌ Suppression du bouton ☰ (menu toggle inutilisé) */
-  .nav-toggle{display:none !important}
-  .nav-links{
-    position:static;
-    background:none;
-    padding:0;
-    border:0;
-    box-shadow:none;
-    flex-direction:row;
-    display:flex;
-  }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .reveal{transition:none}
-/* Fond photos défilantes — taille plein écran garantie */
+/* ===== Fond photos défilantes (plein écran) ===== */
 .bg-slideshow{
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;  /* au lieu de inset:0; */
-  width: 100vw;
-  height: 100vh;                          /* 👈 force la hauteur */
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
   z-index: 0;
-  display: block;                         /* évite tout comportement inline bizarre */
+  display: block;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -196,16 +157,28 @@ button{
 }
 .bg-overlay{
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;   /* au lieu de inset:0; */
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
   z-index: 1;
   background: rgba(245,237,227,0.85);
   pointer-events: none;
 }
+/* Le contenu passe au-dessus */
+header, main, footer{ position: relative; z-index: 2; }
 
-/* S'assure que le contenu passe bien au-dessus */
-header, main, footer{
-  position: relative;
-  z-index: 2;
+/* ===== Responsive ===== */
+@media (max-width: 820px){
+  .grid-2{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .nav-toggle{display:none !important}   /* on masque le bouton ☰ */
+  .nav-links{
+    position:static; background:none; padding:0; border:0; box-shadow:none;
+    flex-direction:row; display:flex;
+  }
+}
+
+/* Accessibilité: moins d’animations si demandé */
+@media (prefers-reduced-motion: reduce){
+  .reveal{transition:none}
+  .bg-slideshow{ transition:none }
 }
