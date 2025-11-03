@@ -1,5 +1,5 @@
 // assets/js/loader.js
-const VERSION = '1.14';        // <-- tu changes juste ça
+const VERSION = '1.15';        // <-- tu changes juste ça
 
 // Expose la version pour main.js si besoin
 window.ASSET_VERSION = VERSION;
