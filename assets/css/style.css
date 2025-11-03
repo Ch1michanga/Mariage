@@ -159,7 +159,7 @@ button{ cursor:pointer; border-radius:12px }
 .bg-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(238, 224, 204, 0.80); /* <— augmente 0.70 vers 0.85 pour "moins transparent" */
+  background: rgba(238, 224, 204, 0.50); /* <— augmente 0.70 vers 0.85 pour "moins transparent" */
   /* ou bien: opacity: 0.7; (à la place de background rgba) */
   pointer-events: none;
   z-index: 1;           /* sous le contenu, au-dessus des photos */
@@ -185,5 +185,12 @@ header, main, footer{ position: relative; z-index: 2; }
 button.nav-toggle[aria-label="Ouvrir le menu"]{
   display: none !important;
 }
+  /* === Masquer le bouton menu ☰ définitivement === */
+button.nav-toggle[aria-label="Ouvrir le menu"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
 
 
