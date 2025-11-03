@@ -180,12 +180,6 @@ main{flex:1;}
   text-decoration:none;
   transition:background .25s ease, border-color .25s ease, color .25s ease;
 }
-.site-footer a:hover{
-  background:var(--green);
-  border-color:var(--green);
-  color:#fff;
-}
-
 /* ===== Animations / effets ===== */
 .reveal{opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease}
 .reveal.is-visible{opacity:1; transform:none}
@@ -238,3 +232,4 @@ button.nav-toggle[aria-label="Ouvrir le menu"]{
   visibility:hidden !important;
   opacity:0 !important;
 }
+
