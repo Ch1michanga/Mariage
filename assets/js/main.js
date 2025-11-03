@@ -16,7 +16,6 @@
 Object.assign(overlayEl.style, {
   position: 'fixed', top: '0', left: '0', right: '0', bottom: '0',
   width: '100vw', height: '100vh', zIndex: '1',
-  background: 'rgba(245,237,227,0.85)',   // <= ceci écrase ton CSS
   pointerEvents: 'none'
 });
 
@@ -98,5 +97,6 @@ document.addEventListener('click', (e)=>{
   e.preventDefault();
   document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
 });
+
 
 
