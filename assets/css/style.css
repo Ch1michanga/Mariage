@@ -181,5 +181,9 @@ header, main, footer{ position: relative; z-index: 2; }
 @media (prefers-reduced-motion: reduce){
   .reveal{transition:none}
   .bg-slideshow{ transition:none }
+/* Kill-switch hamburger */
+button.nav-toggle[aria-label="Ouvrir le menu"]{
+  display: none !important;
 }
+
 
