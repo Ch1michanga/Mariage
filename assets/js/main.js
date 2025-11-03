@@ -58,7 +58,6 @@
   setInterval(changeBackground, 30000);
 })();
 
-// === Partials header/footer + menu mobile ===
 async function includePartials(){
   const [h,f] = await Promise.all([
     fetch('partials/header.html').then(r=>r.text()),
@@ -67,19 +66,23 @@ async function includePartials(){
 
   const header = document.createElement('div');
   header.innerHTML = h;
+
+  // NEW: retire le burger du fragment avant insertion
+  header.querySelectorAll('button.nav-toggle[aria-label="Ouvrir le menu"]').forEach(btn => btn.remove());
+
   document.body.prepend(header);
 
   const footer = document.createElement('div');
   footer.innerHTML = f;
   document.body.appendChild(footer);
 
+  // NEW: si tu as un “links” mobile, protège ce bloc (toggle peut ne plus exister)
   const toggle = document.querySelector('.nav-toggle');
-  const links = document.querySelector('.nav-links');
+  const links  = document.querySelector('.nav-links');
   if (toggle && links) {
     toggle.addEventListener('click', ()=> links.classList.toggle('open'));
   }
 
-  // Assure que le contenu passe bien devant le fond
   document.querySelectorAll('header, main, footer').forEach(el=>{
     el.style.position = 'relative';
     el.style.zIndex = '2';
@@ -94,3 +97,4 @@ document.addEventListener('click', (e)=>{
   e.preventDefault();
   document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
 });
+
