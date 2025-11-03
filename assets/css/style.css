@@ -25,7 +25,7 @@ body{
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
   color:var(--charcoal);
   background:var(--beige);
-  background-image: var(--paper);       /* commentez pour fond lisse */
+  background-image: var(--paper);
   background-blend-mode:multiply;
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
@@ -63,7 +63,7 @@ a, button, .cta, .nav-links a, .nav-links .btn{
   padding:.6rem 1.1rem;
   border-radius:999px;
   border:1px solid rgba(0,0,0,.08);
-  background:var(--beige);     /* au repos : ton du fond */
+  background:var(--beige);
   color:var(--charcoal);
   text-decoration:none;
   transition:background .25s ease, border-color .25s ease, color .25s ease;
@@ -137,8 +137,56 @@ button{ cursor:pointer; border-radius:12px }
 .small{font-size:.9rem; color:var(--olive)}
 .tiny{font-size:.8rem; color:var(--olive)}
 
-.site-footer{padding:2rem 1.25rem; text-align:center; color:var(--olive)}
+/* ===== Footer (même fond/layout que le header + sticky) ===== */
+html, body{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+main{flex:1;}
 
+.site-footer{
+  position:relative;
+  z-index:2;
+  margin-top:auto;
+  padding:1rem 1.25rem;
+  background:rgba(255,253,248,.8);
+  backdrop-filter:saturate(1.2) blur(6px);
+  border-top:1px solid rgba(0,0,0,.05);
+  color:var(--olive);
+  text-align:center;
+  font-size:.9rem;
+  line-height:1.5;
+}
+.footer-inner{
+  max-width:1100px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:.75rem;
+}
+.footer-left{font-size:.9rem; line-height:1.5;}
+.footer-right{display:flex; gap:.5rem; align-items:center;}
+
+.site-footer a{
+  display:inline-block;
+  padding:.45rem .9rem;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.08);
+  background:var(--beige);
+  color:var(--charcoal);
+  text-decoration:none;
+  transition:background .25s ease, border-color .25s ease, color .25s ease;
+}
+.site-footer a:hover{
+  background:var(--green);
+  border-color:var(--green);
+  color:#fff;
+}
+
+/* ===== Animations / effets ===== */
 .reveal{opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease}
 .reveal.is-visible{opacity:1; transform:none}
 
@@ -155,19 +203,21 @@ button{ cursor:pointer; border-radius:12px }
   transition: opacity 1s ease, background-image 0.6s ease-in-out;
   opacity: 1;
 }
+
 /* Voile beige par-dessus les photos */
 .bg-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(238, 224, 204, 0.50); /* <— augmente 0.70 vers 0.85 pour "moins transparent" */
-  /* ou bien: opacity: 0.7; (à la place de background rgba) */
+  background: rgba(238,224,204,0.30) !important; /* plus léger et lisible */
   pointer-events: none;
-  z-index: 1;           /* sous le contenu, au-dessus des photos */
+  z-index: 1;
 }
+
 /* Le contenu passe au-dessus */
 header, main, footer{ position: relative; z-index: 2; }
+
 /* ===== Responsive ===== */
-@media (max-width: 820px){
+@media (max-width:820px){
   .grid-2{grid-template-columns:1fr}
   .grid-3{grid-template-columns:1fr 1fr}
   .nav-links{
@@ -176,24 +226,15 @@ header, main, footer{ position: relative; z-index: 2; }
   }
 }
 
-/* Accessibilité: moins d’animations si demandé */
+/* ===== Accessibilité : moins d’animations ===== */
 @media (prefers-reduced-motion: reduce){
   .reveal{transition:none}
-  .bg-slideshow{ transition:none }
-/* Kill-switch hamburger */
+  .bg-slideshow{transition:none}
+}
+
+/* ===== Masquer le bouton ☰ définitivement ===== */
 button.nav-toggle[aria-label="Ouvrir le menu"]{
-  display: none !important;
+  display:none !important;
+  visibility:hidden !important;
+  opacity:0 !important;
 }
-  /* === Masquer le bouton menu ☰ définitivement === */
-button.nav-toggle[aria-label="Ouvrir le menu"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-
-
-
-
-
-
