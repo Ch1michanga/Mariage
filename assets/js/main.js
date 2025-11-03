@@ -6,20 +6,20 @@
   const overlayEl = document.createElement('div');
   overlayEl.className = 'bg-overlay';
 
-  // Styles inline critiques (plein écran même si CSS en cache)
+  // Styles inline (compat iOS: pas de 100vw/100vh)
   Object.assign(bgEl.style, {
-    position: 'fixed', top: '0', left: '0', right: '0', bottom: '0',
-    width: '100vw', height: '100vh', zIndex: '0', display: 'block',
-    backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat',
-    transition: 'opacity 1s ease, background-image 0.6s ease-in-out', opacity: '1'
+    position:'fixed', inset:'0',
+    zIndex:'0', display:'block',
+    backgroundSize:'cover', backgroundPosition:'center', backgroundRepeat:'no-repeat',
+    transition:'opacity 1s ease, background-image 0.6s ease-in-out', opacity:'1'
   });
-Object.assign(overlayEl.style, {
-  position: 'fixed', top: '0', left: '0', right: '0', bottom: '0',
-  width: '100vw', height: '100vh', zIndex: '1',
-  pointerEvents: 'none'
-});
+  Object.assign(overlayEl.style, {
+    position:'fixed', inset:'0',
+    zIndex:'1', pointerEvents:'none'
+    // le background est piloté par le CSS (.bg-overlay)
+  });
 
-  // Place les calques au tout début du <body> (derrière le contenu)
+  // Place les calques au tout début du <body>
   document.body.prepend(bgEl);
   document.body.prepend(overlayEl);
 
@@ -35,15 +35,13 @@ Object.assign(overlayEl.style, {
     base + 'lac.jpg'
   ];
 
-  // Préchargement (transition fluide)
+  // Préchargement
   const cache = [];
   backgrounds.forEach(src => { const img = new Image(); img.src = src; cache.push(img); });
 
   // Affiche la première
   let current = 0;
-  if (backgrounds.length) {
-    bgEl.style.backgroundImage = `url(${backgrounds[0]})`;
-  }
+  if (backgrounds.length) bgEl.style.backgroundImage = `url(${backgrounds[0]})`;
 
   // Changement toutes les 30s (fondu)
   function changeBackground(){
@@ -53,36 +51,42 @@ Object.assign(overlayEl.style, {
       current = (current + 1) % backgrounds.length;
       bgEl.style.backgroundImage = `url(${backgrounds[current]})`;
       bgEl.style.opacity = '1';
-    }, 1000); // doit matcher la transition CSS (opacity 1s)
+    }, 1000);
   }
   setInterval(changeBackground, 30000);
 })();
 
+// === Partials header/footer + menu mobile ===
 async function includePartials(){
   const [h,f] = await Promise.all([
     fetch('partials/header.html').then(r=>r.text()),
     fetch('partials/footer.html').then(r=>r.text())
   ]);
 
-  const header = document.createElement('div');
-  header.innerHTML = h;
+  // Insère header / footer (sans supprimer le burger)
+  const headerWrap = document.createElement('div');
+  headerWrap.innerHTML = h;
+  document.body.prepend(headerWrap);
 
-  // NEW: retire le burger du fragment avant insertion
-  header.querySelectorAll('button.nav-toggle[aria-label="Ouvrir le menu"]').forEach(btn => btn.remove());
+  const footerWrap = document.createElement('div');
+  footerWrap.innerHTML = f;
+  document.body.appendChild(footerWrap);
 
-  document.body.prepend(header);
-
-  const footer = document.createElement('div');
-  footer.innerHTML = f;
-  document.body.appendChild(footer);
-
-  // NEW: si tu as un “links” mobile, protège ce bloc (toggle peut ne plus exister)
+  // Sélecteurs du menu
   const toggle = document.querySelector('.nav-toggle');
   const links  = document.querySelector('.nav-links');
+
   if (toggle && links) {
-    toggle.addEventListener('click', ()=> links.classList.toggle('open'));
+    const toggleMenu = () => {
+      const opened = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      // Empêche le scroll de fond quand le menu mobile est ouvert
+      document.body.style.overflow = opened ? 'hidden' : '';
+    };
+    toggle.addEventListener('click', toggleMenu);
   }
 
+  // Assure que le contenu passe bien devant le fond
   document.querySelectorAll('header, main, footer').forEach(el=>{
     el.style.position = 'relative';
     el.style.zIndex = '2';
@@ -97,6 +101,3 @@ document.addEventListener('click', (e)=>{
   e.preventDefault();
   document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
 });
-
-
-
