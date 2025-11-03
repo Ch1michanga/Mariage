@@ -226,12 +226,6 @@ header, main, footer{ position: relative; z-index: 2; }
   .reveal{transition:none}
   .bg-slideshow{transition:none}
 }
-
-/* ===== Masquer le bouton ☰ définitivement ===== */
-button.nav-toggle[aria-label="Ouvrir le menu"]{
-  display:none !important;
-  visibility:hidden !important;
-  opacity:0 !important;
 }
 /* === 0) Sécurité anti-scroll horizontal global === */
 html, body { overflow-x: hidden; }
@@ -269,4 +263,42 @@ img, video, svg, canvas { max-width:100%; height:auto; display:block; }
   .container{ padding:1.25rem; }
   .card{ margin-bottom:1.25rem; padding:1rem; }
   .banner{ padding:3rem 1.25rem; background-position:center; }
+}
+/* Desktop par défaut: burger invisible, liens visibles */
+.nav-toggle { display: none; }
+.nav-links  { display: flex; gap: .75rem; }
+
+/* Mobile: burger visible, menu caché jusqu’à ouverture */
+@media (max-width: 820px){
+  .site-nav { flex-wrap: wrap; }
+
+  .nav-toggle{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .55rem .8rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: var(--beige);
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .nav-links{
+    display: none;                /* caché par défaut */
+    width: 100%;
+    flex-direction: column;
+    background: rgba(255,253,248,.9);      /* même fond “verre dépoli” */
+    backdrop-filter: saturate(1.2) blur(6px);
+    border-top: 1px solid rgba(0,0,0,.05);
+    padding: .5rem 0;
+  }
+  .nav-links.open{ display: flex; }
+
+  .nav-links a{
+    padding: .75rem 1rem;
+    width: 100%;
+    text-align: left;
+    border-radius: 12px;
+  }
 }
