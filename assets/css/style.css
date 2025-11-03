@@ -93,6 +93,7 @@ a:focus-visible, button:focus-visible, .cta:focus-visible{
   border-radius:18px;
   box-shadow:var(--shadow);
   padding:1.25rem;
+  margin-bottom:2rem;
 }
 
 .center{text-align:center}
@@ -232,4 +233,5 @@ button.nav-toggle[aria-label="Ouvrir le menu"]{
   visibility:hidden !important;
   opacity:0 !important;
 }
+
 
