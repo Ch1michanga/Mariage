@@ -233,5 +233,40 @@ button.nav-toggle[aria-label="Ouvrir le menu"]{
   visibility:hidden !important;
   opacity:0 !important;
 }
+/* === 0) Sécurité anti-scroll horizontal global === */
+html, body { overflow-x: hidden; }
 
+/* === 1) Conteneurs vraiment fluides === */
+.container { max-width: 1100px; width: 100%; }
 
+/* === 2) Header: ne jamais dépasser la largeur de l'écran === */
+.site-nav { display:flex; align-items:center; justify-content:space-between; flex-wrap: wrap; max-width:100%; overflow:hidden; }
+.brand { flex: 1 1 auto; min-width: 0; }   /* autorise la marque à rétrécir */
+.nav-links { display:flex; gap:.75rem; flex-wrap: wrap; max-width:100%; }
+.nav-links a { white-space: normal; }      /* permet le retour à la ligne si libellé long */
+
+/* Empêche tout élément média de casser la largeur */
+img, video, svg, canvas { max-width:100%; height:auto; display:block; }
+
+/* === 3) Fond plein écran fiable sur iOS (évite 100vh/100vw) === */
+.bg-slideshow,
+.bg-overlay {
+  position: fixed;
+  inset: 0;
+  min-height: 100dvh;   /* viewport dynamique iOS */
+}
+
+/* === 4) Responsive global === */
+@media (max-width: 820px){
+  .grid-2{ grid-template-columns:1fr; }
+  .grid-3{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 600px){
+  body{ font-size:15px; line-height:1.6; }
+  .site-nav{ gap:.5rem; padding:.75rem 1rem; }
+  .nav-links{ width:100%; justify-content:flex-start; gap:.5rem; }
+  .nav-links a{ padding:.5rem .75rem; }
+  .container{ padding:1.25rem; }
+  .card{ margin-bottom:1.25rem; padding:1rem; }
+  .banner{ padding:3rem 1.25rem; background-position:center; }
+}
