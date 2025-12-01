@@ -3,38 +3,36 @@ const FORM_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxIA4f206tWFaNA4O
 const form = document.getElementById('rsvp-form');
 const statusBox = document.getElementById('rsvp-status');
 
-function setStatus(type, msg){
+function setStatus(type, msg) {
   statusBox.className = `notice ${type}`;
   statusBox.textContent = msg;
 }
 
-form?.addEventListener('submit', async (e)=>{
+form?.addEventListener('submit', async (e) => {
   e.preventDefault();
   setStatus('', 'Envoi en cours…');
+  const data = Object.fromEntries(new FormData(form).entries());
 
-  const fd = new FormData(form);
-  // convertir en x-www-form-urlencoded pour éviter le preflight CORS
-  const params = new URLSearchParams();
-  for (const [k,v] of fd.entries()) params.append(k, v);
-
-  if(!params.get('nom') || !params.get('email')){
+  if (!data.nom || !data.email) {
     setStatus('error', 'Merci d’indiquer au moins votre nom et votre email.');
     return;
   }
-
-  try{
-    const res = await fetch(FORM_ENDPOINT, { method: 'POST', body: params });
-    const text = await res.text();
-    let out = null; try { out = JSON.parse(text); } catch(_){}
-    if (res.ok && out?.ok === true && out?.written === true){
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const out = await res.json();
+    if (out?.ok) {
       setStatus('success', 'Merci ! Votre réponse a bien été enregistrée.');
       form.reset();
     } else {
-      throw new Error('Réponse invalide: ' + (text || res.status));
+      throw new Error(out?.message || 'Erreur inconnue');
     }
-  }catch(err){
-    setStatus('error', 'Erreur réseau : ' + String(err));
+  } catch (err) {
+    setStatus('error', 'Oups, une erreur est survenue. Réessayez plus tard.');
     console.error(err);
   }
 });
-
