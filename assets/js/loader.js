@@ -22,7 +22,7 @@ window.ASSET_VERSION = VERSION;
 
 //Versioning
 (function () {
-  const VERSION = "1"; // ← tu changes ce chiffre quand tu veux
+  const VERSION = "2"; // ← tu changes ce chiffre quand tu veux
 
   const css = document.createElement("link");
   css.rel = "stylesheet";
