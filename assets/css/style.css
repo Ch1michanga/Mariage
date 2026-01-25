@@ -12,8 +12,8 @@
   /* Text */
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   --radius: 12px;
-   --bg-slideshow-duration: 21s;
-  --bg-opacity: 0.15;
+   --bg-slideshow-duration: 40s;
+  --bg-opacity: 0.30;
   --hero-slide-interval: 5000ms;
   --hero-fade-duration: 1.5s;
 }
@@ -376,3 +376,4 @@ button[type="submit"]:hover {
   }
 
 }
+
