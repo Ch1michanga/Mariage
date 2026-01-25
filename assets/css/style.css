@@ -51,82 +51,50 @@ body {
   display: block;
 }
 
-/* Background slideshow (toutes les pages) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-
-  /* Fond derrière tout */
-  z-index: 0;
-
-  /* L'image de fond reste à 100% d'opacité */
-  opacity: 1;
-
-  animation: none;
-
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* Voile beige au-dessus du fond */
+/* ===== Background global smooth (piloté par main.js) =====
+   ::before et ::after = 2 couches d'images (crossfade)
+   Le voile beige est géré par un overlay sur ::after via box-shadow inset
+*/
+body::before,
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-
-  /* Au-dessus de ::before */
   z-index: 0;
 
-  /* Plus bg-opacity est grand, plus l'image est visible */
-  background: rgba(249, 247, 242, calc(1 - var(--bg-opacity)));
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
+  animation: none;
   pointer-events: none;
 }
+
+/* Couche 1 */
+body::before {
+  opacity: 1;
+  background-image: var(--bg1);
+  transition: opacity 1.2s ease-in-out;
+}
+
+/* Couche 2 + voile beige par dessus */
+body::after {
+  opacity: 0;
+  background-image: var(--bg2);
+  transition: opacity 1.2s ease-in-out;
+
+  /* voile beige constant, contrôlé par --bg-opacity */
+  box-shadow: inset 0 0 0 9999px rgba(249, 247, 242, calc(1 - var(--bg-opacity)));
+}
+
+/* Quand on fade vers la couche 2 */
+body.bg-fade::before { opacity: 0; }
+body.bg-fade::after  { opacity: 1; }
 
 /* Tout le contenu au-dessus du fond */
 body > * {
   position: relative;
   z-index: 1;
-}
-
-@keyframes rotateBackground {
-  0%,
-  14% {
-    background-image: url('../img/backgrounds/IMG_20160713_175342.jpg');
-  }
-
-  15%,
-  28% {
-    background-image: url('../img/backgrounds/Les_Domaines_de_Patras_Instagram-001-6.jpg');
-  }
-
-  29%,
-  42% {
-    background-image: url('../img/backgrounds/Les_Domaines_de_Patras_Le_Domaine-001.jpg');
-  }
-
-  43%,
-  56% {
-    background-image: url('../img/backgrounds/Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-162-1-scaled.jpg');
-  }
-
-  57%,
-  70% {
-    background-image: url('../img/backgrounds/Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-165.jpeg');
-  }
-
-  71%,
-  84% {
-    background-image: url('../img/backgrounds/Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-639-scaled-1593x896.jpg');
-  }
-
-  85%,
-  100% {
-    background-image: url('../img/backgrounds/lac.jpg');
-  }
 }
 
 /* Typography */
@@ -457,7 +425,7 @@ button[type="submit"]:hover {
   font-size: 0.85rem;
 }
 
-/* Responsive (fusionné en un seul bloc) */
+/* Responsive */
 @media (max-width: 768px) {
   .nav-links {
     display: none;
@@ -483,4 +451,3 @@ button[type="submit"]:hover {
     font-size: 2rem;
   }
 }
-
