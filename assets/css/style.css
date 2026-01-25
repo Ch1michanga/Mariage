@@ -414,25 +414,53 @@ button[type="submit"]:hover {
   border: 1px solid #f5c6cb;
 }
 
-/* Footer dans un cadre blanc */
+/* Footer style identique au header */
 .site-footer {
   margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  z-index: 90;
+
   width: 100%;
-  padding: 1.5rem 0;
+  padding: 1rem 2rem;
+
+  background: rgba(249, 247, 242, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
   text-align: center;
 }
 
-.site-footer .footer-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 1rem 1.25rem;
-  background: var(--ivory);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  color: #777;
-  font-size: 0.9rem;
+.footer-main {
+  margin: 0;
+  color: var(--charcoal);
+  font-size: 0.95rem;
 }
+
+.footer-sub {
+  margin: 0.25rem 0 0;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 0.85rem 1rem;
+  }
+
+  .footer-main {
+    font-size: 0.9rem;
+  }
+
+  .footer-sub {
+    font-size: 0.8rem;
+  }
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -449,3 +477,4 @@ button[type="submit"]:hover {
     font-size: 2rem;
   }
 }
+
