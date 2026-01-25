@@ -11,12 +11,16 @@
   /* Slideshow global background */
   --bg-slideshow-duration: 60s;
 
-  /* bg-opacity = 0.50 -> voile beige à 50% (image visible) */
+  /* plus grand = plus l'image est visible (voile beige plus léger) */
   --bg-opacity: 0.50;
 
-  /* Home hero slideshow */
+  /* Home hero slideshow (plus utilisé maintenant, mais on garde les vars) */
   --hero-slide-interval: 5000ms;
   --hero-fade-duration: 1.5s;
+
+  /* Fallback au cas où JS ne charge pas immédiatement */
+  --bg1: url("../img/backgrounds/IMG_20160713_175342.jpg");
+  --bg2: url("../img/backgrounds/Les_Domaines_de_Patras_Le_Domaine-001.jpg");
 }
 
 * {
@@ -28,18 +32,27 @@ body {
   height: 100%;
 }
 
+/* Voile beige indépendant du slideshow (toujours présent) */
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background: rgba(249, 247, 242, calc(1 - var(--bg-opacity)));
+}
+
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--charcoal);
 
-  /* Fond géré par ::before/::after */
   background: transparent;
 
   line-height: 1.6;
   position: relative;
 
-  /* Footer en bas */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -53,7 +66,7 @@ body {
 
 /* ===== Background global smooth (piloté par main.js) =====
    ::before et ::after = 2 couches d'images (crossfade)
-   Le voile beige est géré par un overlay sur ::after via box-shadow inset
+   Le voile beige est sur html::after
 */
 body::before,
 body::after {
@@ -66,8 +79,8 @@ body::after {
   background-position: center;
   background-repeat: no-repeat;
 
-  animation: none;
   pointer-events: none;
+  animation: none;
 }
 
 /* Couche 1 */
@@ -77,24 +90,21 @@ body::before {
   transition: opacity 1.2s ease-in-out;
 }
 
-/* Couche 2 + voile beige par dessus */
+/* Couche 2 */
 body::after {
   opacity: 0;
   background-image: var(--bg2);
   transition: opacity 1.2s ease-in-out;
-
-  /* voile beige constant, contrôlé par --bg-opacity */
-  box-shadow: inset 0 0 0 9999px rgba(249, 247, 242, calc(1 - var(--bg-opacity)));
 }
 
 /* Quand on fade vers la couche 2 */
 body.bg-fade::before { opacity: 0; }
 body.bg-fade::after  { opacity: 1; }
 
-/* Tout le contenu au-dessus du fond */
+/* Tout le contenu au-dessus du fond + voile */
 body > * {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* Typography */
@@ -179,7 +189,6 @@ a:hover {
   color: white;
 }
 
-/* Optionnel, pour supprimer le contour bleu au clic */
 .nav-links a:focus,
 .nav-links a:focus-visible {
   outline: none;
@@ -221,7 +230,7 @@ a:hover {
   text-align: center;
 }
 
-/* Hero Slideshow */
+/* Hero */
 .hero {
   position: relative;
   height: 60vh;
@@ -236,36 +245,7 @@ a:hover {
   text-align: center;
 }
 
-.hero-slideshow {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-
-/* Chaque slide couvre toute la zone et se superpose aux autres */
-.slide {
-  position: absolute;
-  inset: 0;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  opacity: 0;
-  transform: scale(1.03);
-
-  transition:
-    opacity var(--hero-fade-duration) ease-in-out,
-    transform 6s ease;
-}
-
-/* Slide active */
-.slide.active {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Hero content: suppression du cadre blanc */
+/* Hero content (sans cadre blanc) */
 .hero-content {
   position: relative;
   z-index: 2;
@@ -283,15 +263,10 @@ a:hover {
   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
-.hero-content h1 {
-  color: white;
-}
+.hero-content h1 { color: white; }
+.hero-content p { color: rgba(255, 255, 255, 0.92); }
 
-.hero-content p {
-  color: rgba(255, 255, 255, 0.92);
-}
-
-/* CTA garde le look */
+/* CTA */
 .cta {
   display: inline-block;
   margin-top: 1rem;
