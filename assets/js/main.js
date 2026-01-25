@@ -25,14 +25,12 @@ onReady(() => {
       footer.innerHTML = f;
       document.body.appendChild(footer);
 
-      // Toggle mobile
       const toggle = document.querySelector(".nav-toggle");
       const links = document.querySelector(".nav-links");
       if (toggle && links) {
         toggle.addEventListener("click", () => links.classList.toggle("open"));
       }
 
-      // Met en évidence la page active dans le menu (après injection du header)
       const path = window.location.pathname;
       const currentFile =
         path.endsWith("/") || path === "" ? "index.html" : path.split("/").pop().toLowerCase();
@@ -56,32 +54,39 @@ onReady(() => {
     document.querySelector(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" });
   });
 
-  // Background slideshow global (toutes les pages) - crossfade smooth
+  // Background slideshow global smooth
   (function backgroundCrossfade() {
-    const images = [
-      "assets/img/backgrounds/IMG_20160713_175342.jpg",
-      "assets/img/backgrounds/Les_Domaines_de_Patras_Instagram-001-6.jpg",
-      "assets/img/backgrounds/Les_Domaines_de_Patras_Le_Domaine-001.jpg",
-      "assets/img/backgrounds/Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-162-1-scaled.jpg",
-      "assets/img/backgrounds/Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-165.jpeg",
-      "assets/img/backgrounds/Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-639-scaled-1593x896.jpg",
-      "assets/img/backgrounds/lac.jpg"
+    // Noms de fichiers
+    const files = [
+      "IMG_20160713_175342.jpg",
+      "Les_Domaines_de_Patras_Instagram-001-6.jpg",
+      "Les_Domaines_de_Patras_Le_Domaine-001.jpg",
+      "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-162-1-scaled.jpg",
+      "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-165.jpeg",
+      "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-639-scaled-1593x896.jpg",
+      "lac.jpg"
     ];
 
-    if (!images.length) return;
+    if (!files.length) return;
 
-    // Précharge pour éviter les flashes
-    images.forEach(src => {
+    // 1) Chemins pour le CSS (résolus depuis assets/css/style.css)
+    const cssImages = files.map(f => `../img/backgrounds/${f}`);
+
+    // 2) Chemins pour le préchargement (résolus depuis les pages HTML)
+    const preloadImages = files.map(f => `assets/img/backgrounds/${f}`);
+
+    // Précharge
+    preloadImages.forEach(src => {
       const img = new Image();
       img.src = src;
     });
 
-    // Fallback immédiat: met déjà une image, même si CSS tarde
-    document.body.style.setProperty("--bg1", `url("${images[0]}")`);
-    document.body.style.setProperty("--bg2", `url("${images[1 % images.length]}")`);
+    // Initialise les 2 couches
+    document.body.style.setProperty("--bg1", `url("${cssImages[0]}")`);
+    document.body.style.setProperty("--bg2", `url("${cssImages[1 % cssImages.length]}")`);
     document.body.classList.remove("bg-fade");
 
-    // Durée totale (ex: "60s") -> ms
+    // Durée totale
     const totalMs = (() => {
       const v = getComputedStyle(document.documentElement)
         .getPropertyValue("--bg-slideshow-duration")
@@ -93,22 +98,19 @@ onReady(() => {
       return Number.isFinite(n) ? n : 60000;
     })();
 
-    // Durée par image
-    const stepMs = Math.max(3500, Math.floor(totalMs / images.length));
+    const stepMs = Math.max(3500, Math.floor(totalMs / cssImages.length));
 
     let i = 1;
     let showSecond = false;
 
     setInterval(() => {
-      i = (i + 1) % images.length;
+      i = (i + 1) % cssImages.length;
 
       if (showSecond) {
-        // prochaine image dans bg1, fade vers bg1
-        document.body.style.setProperty("--bg1", `url("${images[i]}")`);
+        document.body.style.setProperty("--bg1", `url("${cssImages[i]}")`);
         document.body.classList.remove("bg-fade");
       } else {
-        // prochaine image dans bg2, fade vers bg2
-        document.body.style.setProperty("--bg2", `url("${images[i]}")`);
+        document.body.style.setProperty("--bg2", `url("${cssImages[i]}")`);
         document.body.classList.add("bg-fade");
       }
 
