@@ -152,10 +152,14 @@ a:hover {
 .nav-links a {
   font-weight: 500;
   color: var(--charcoal);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  text-decoration: none;
 }
 
 .nav-links a:hover {
-  color: var(--gold);
+  color: var(--sage);
 }
 
 .nav-links .btn {
@@ -376,5 +380,6 @@ button[type="submit"]:hover {
   }
 
 }
+
 
 
