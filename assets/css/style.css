@@ -63,7 +63,8 @@ body::before {
   /* L'image de fond reste à 100% d'opacité */
   opacity: 1;
 
-  animation: rotateBackground var(--bg-slideshow-duration) infinite;
+  animation: none;
+
 
   background-size: cover;
   background-position: center;
@@ -482,3 +483,4 @@ button[type="submit"]:hover {
     font-size: 2rem;
   }
 }
+
