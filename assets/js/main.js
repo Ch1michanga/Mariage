@@ -40,32 +40,6 @@ async function includePartials() {
 includePartials();
 
 
-// Slideshow Logic (home) - conserve si tu as encore des .slide dans index.html
-(function () {
-  const slides = document.querySelectorAll('.slide');
-  if (!slides.length) return;
-
-  const intervalMs = (() => {
-    const v = getComputedStyle(document.documentElement)
-      .getPropertyValue('--hero-slide-interval')
-      .trim();
-    if (!v) return 5000;
-    if (v.endsWith('ms')) return parseFloat(v);
-    if (v.endsWith('s')) return parseFloat(v) * 1000;
-    const n = parseFloat(v);
-    return Number.isFinite(n) ? n : 5000;
-  })();
-
-  let currentSlide = 0;
-
-  setInterval(() => {
-    slides[currentSlide].classList.remove('active');
-    currentSlide = (currentSlide + 1) % slides.length;
-    slides[currentSlide].classList.add('active');
-  }, intervalMs);
-})();
-
-
 // Background slideshow global (toutes les pages) - crossfade smooth
 (function () {
   const images = [
@@ -80,22 +54,11 @@ includePartials();
 
   if (!images.length) return;
 
-  // Crée une règle CSS qui force ::before et ::after à utiliser 2 variables
-  const styleTag = document.createElement('style');
-  styleTag.textContent = `
-    body::before { background-image: var(--bg1); transition: opacity 1.2s ease-in-out; }
-    body::after  { background-image: var(--bg2); transition: opacity 1.2s ease-in-out; }
-    body.bg-fade::before { opacity: 0; }
-    body.bg-fade::after  { opacity: 1; }
-  `;
-  document.head.appendChild(styleTag);
-
-  // On initialise les 2 couches
-  let i = 0;
+  // Initialise 2 couches (bg1/bg2). Le CSS gère l'opacité + le voile beige.
   document.body.style.setProperty('--bg1', `url("${images[0]}")`);
   document.body.style.setProperty('--bg2', `url("${images[1 % images.length]}")`);
 
-  // Assure que les opacités de base sont correctes
+  // Assure l'état initial
   document.body.classList.remove('bg-fade');
 
   // Durée totale et intervalle par image
@@ -112,23 +75,24 @@ includePartials();
 
   const stepMs = Math.max(3000, Math.floor(totalMs / images.length));
 
-  // Précharge pour éviter les flashes et les sauts
+  // Précharge pour éviter les flashes
   images.forEach(src => {
     const img = new Image();
     img.src = src;
   });
 
+  let i = 0;
   let showSecond = false;
 
   setInterval(() => {
     i = (i + 1) % images.length;
 
     if (showSecond) {
-      // On met la prochaine image dans bg1, et on fade vers bg1
+      // prochaine image dans bg1, fade vers bg1
       document.body.style.setProperty('--bg1', `url("${images[i]}")`);
       document.body.classList.remove('bg-fade');
     } else {
-      // On met la prochaine image dans bg2, et on fade vers bg2
+      // prochaine image dans bg2, fade vers bg2
       document.body.style.setProperty('--bg2', `url("${images[i]}")`);
       document.body.classList.add('bg-fade');
     }
