@@ -162,6 +162,22 @@ a:hover {
   color: var(--sage);
 }
 
+.nav-links a.active {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: white;
+}
+
+.nav-links a.active:hover {
+  color: white;
+}
+
+/* Optionnel, pour supprimer le contour bleu au clic */
+.nav-links a:focus,
+.nav-links a:focus-visible {
+  outline: none;
+}
+
 .nav-links .btn {
   background: var(--sage);
   color: white;
@@ -380,6 +396,7 @@ button[type="submit"]:hover {
   }
 
 }
+
 
 
 
