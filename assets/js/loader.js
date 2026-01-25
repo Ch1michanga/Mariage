@@ -19,3 +19,18 @@ window.ASSET_VERSION = VERSION;
   s.src = `assets/js/main.js?v=${VERSION}`;
   document.head.appendChild(s);
 })();
+
+//Versioning
+(function () {
+  const VERSION = "1"; // ← tu changes ce chiffre quand tu veux
+
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = `assets/css/style.css?v=${VERSION}`;
+  document.head.appendChild(css);
+
+  const js = document.createElement("script");
+  js.src = `assets/js/main.js?v=${VERSION}`;
+  document.body.appendChild(js);
+})();
+
