@@ -20,6 +20,13 @@ async function includePartials() {
     console.error("Error loading partials:", e);
   }
 }
+    // Met en évidence la page active dans le menu
+    const current = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    document.querySelectorAll('.nav-links a[href]').forEach(a => {
+      const href = a.getAttribute('href').split('?')[0].toLowerCase();
+      if (href === current) a.classList.add('active');
+    });
+
 includePartials();
 
 // Slideshow Logic
@@ -51,3 +58,4 @@ document.addEventListener('click', (e) => {
   document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
 
 });
+
