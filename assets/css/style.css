@@ -10,6 +10,8 @@
 
   /* Slideshow global background */
   --bg-slideshow-duration: 60s;
+
+  /* bg-opacity = 0.50 -> voile beige à 50% (image visible) */
   --bg-opacity: 0.50;
 
   /* Home hero slideshow */
@@ -30,11 +32,14 @@ body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--charcoal);
-  background: var(--beige);
+
+  /* Important: on rend le fond "transparent" car le background est géré par ::before/::after */
+  background: transparent;
+
   line-height: 1.6;
   position: relative;
 
-  /* Important pour footer en bas */
+  /* Footer en bas */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -51,14 +56,39 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1;
 
-  opacity: var(--bg-opacity);
+  /* Fond derrière tout */
+  z-index: 0;
+
+  /* L'image de fond reste à 100% d'opacité */
+  opacity: 1;
+
   animation: rotateBackground var(--bg-slideshow-duration) infinite;
 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* Voile beige au-dessus du fond, pour obtenir l'effet de transparence */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  /* Même z-index que ::before, mais comme ::after est après, il est au-dessus */
+  z-index: 0;
+
+  /* Plus bg-opacity est grand, plus l'image est visible */
+  background: rgba(249, 247, 242, calc(1 - var(--bg-opacity)));
+
+  pointer-events: none;
+}
+
+/* Tout le contenu au-dessus du fond */
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes rotateBackground {
@@ -186,8 +216,7 @@ a:hover {
   outline: none;
 }
 
-/* Ancien style "btn" si encore présent par erreur dans le header
-   Tu peux le garder, il ne s'appliquera plus si tu as retiré class="btn" sur RSVP */
+/* Ancien style "btn" si encore présent par erreur dans le header */
 .nav-links .btn {
   background: var(--sage);
   color: white;
