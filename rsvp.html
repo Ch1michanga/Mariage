@@ -1,57 +1,61 @@
 <!doctype html>
 <html lang="fr">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RSVP — Marc & Marie-Frédérique</title>
   <link rel="icon" type="image/png" href="assets/img/favicon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@400;600&display=swap"
-    rel="stylesheet">
-  <script src="assets/js/loader.js"></script />
-  <script defer src="assets/js/main.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+  <script src="assets/js/loader.js"></script>
   <script defer src="assets/js/rsvp.js"></script>
 </head>
 
 <body>
-  <header></header>
-  <main class="container">
-    <div class="card">
-      <h1>RSVP</h1>
-      <p class="lead">Merci de confirmer votre présence.</p>
-      <div id="rsvp-status" class="notice" aria-live="polite"></div>
-      <form id="rsvp-form">
-        <label>Nom complet *</label>
-        <input name="nom" required />
-        <label>Email *</label>
-        <input name="email" type="email" required />
-        <label>Nombre de personnes</label>
-        <select name="guests">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-        <label>Présence</label>
-        <select name="presence">
-          <option value="oui">Oui, avec plaisir</option>
-          <option value="non">Malheureusement non</option>
-        </select>
-        <label>Régimes alimentaires / Allergies</label>
-        <textarea name="diet" rows="3" placeholder="Ex.: végétarien, sans gluten…"></textarea>
-        <label>Message</label>
-        <textarea name="message" rows="3"></textarea>
-        <div class="small">* Champs obligatoires</div>
-        <button type="submit">Envoyer ma réponse</button>
-      </form>
+  <main class="page-content">
+    <div class="container">
+      <div class="card">
+        <h1>RSVP</h1>
+        <p class="lead">Merci de confirmer votre présence.</p>
+
+        <div id="rsvp-status" class="notice" aria-live="polite"></div>
+
+        <form id="rsvp-form">
+          <label>Nom complet *</label>
+          <input name="nom" required />
+
+          <label>Email *</label>
+          <input name="email" type="email" required />
+
+          <label>Nombre de personnes</label>
+          <select name="guests">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+
+          <label>Présence</label>
+          <select name="presence">
+            <option value="oui">Oui, avec plaisir</option>
+            <option value="non">Malheureusement non</option>
+          </select>
+
+          <label>Régimes alimentaires / allergies</label>
+          <textarea name="diet" rows="3" placeholder="Ex.: végétarien, sans gluten…"></textarea>
+
+          <label>Message</label>
+          <textarea name="message" rows="3"></textarea>
+
+          <div class="small">* Champs obligatoires</div>
+
+          <button type="submit">Envoyer ma réponse</button>
+        </form>
+      </div>
     </div>
   </main>
-  <footer></footer>
 </body>
-
-
 </html>
-
