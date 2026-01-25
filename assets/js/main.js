@@ -31,7 +31,17 @@ if (slides.length > 0) {
     slides[currentSlide].classList.remove('active');
     currentSlide = (currentSlide + 1) % slides.length;
     slides[currentSlide].classList.add('active');
-  }, 5000); // Change slide every 5 seconds
+}, (() => {
+  const v = getComputedStyle(document.documentElement)
+    .getPropertyValue('--hero-slide-interval')
+    .trim();
+
+  if (!v) return 5000;
+  if (v.endsWith('ms')) return parseFloat(v);
+  if (v.endsWith('s')) return parseFloat(v) * 1000;
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? n : 5000;
+})());
 }
 
 // Scroll doux pour ancres internes
@@ -39,4 +49,5 @@ document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]');
   if (!a) return; e.preventDefault();
   document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+
 });
