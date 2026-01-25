@@ -12,6 +12,10 @@
   /* Text */
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   --radius: 12px;
+   --bg-slideshow-duration: 21s;
+  --bg-opacity: 0.15;
+  --hero-slide-interval: 5000ms;
+  --hero-fade-duration: 1.5s;
 }
 
 * {
@@ -44,8 +48,8 @@ body::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.15;
-  animation: rotateBackground 21s infinite;
+  opacity: var(--bg-opacity);
+  animation: rotateBackground var(--bg-slideshow-duration) infinite;
 }
 
 @keyframes rotateBackground {
@@ -222,7 +226,7 @@ a:hover {
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity var(--hero-fade-duration) ease-in-out;
 }
 
 .slide.active {
@@ -370,4 +374,5 @@ button[type="submit"]:hover {
   h1 {
     font-size: 2rem;
   }
+
 }
