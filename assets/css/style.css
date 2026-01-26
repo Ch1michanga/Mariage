@@ -413,3 +413,106 @@ button[type="submit"]:hover {
   .nav-links { display: none; }
   h1 { font-size: 2rem; }
 }
+
+/* ===== Programme (accordéon + 2 colonnes) ===== */
+
+.day-grid {
+  display: grid;
+  grid-template-columns: 1fr 2px 320px;
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.day-divider {
+  width: 2px;
+  background: var(--sage);
+  border-radius: 2px;
+  min-height: 160px;
+  opacity: 0.9;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.timeline li {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.timeline .time {
+  font-weight: 600;
+  color: var(--sage);
+  letter-spacing: 0.2px;
+}
+
+.timeline .item {
+  color: rgba(51, 51, 51, 0.9);
+}
+
+/* Accordéon premium */
+.acc summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.acc summary::-webkit-details-marker {
+  display: none;
+}
+
+.acc-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.acc-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.4rem;
+  color: var(--sage);
+}
+
+.acc-sub {
+  color: rgba(51, 51, 51, 0.75);
+  font-size: 0.95rem;
+}
+
+/* Chevron */
+.acc-summary::after {
+  content: "▾";
+  color: var(--sage);
+  font-size: 1.1rem;
+  transform: translateY(-1px);
+  transition: transform 200ms ease;
+}
+
+.acc[open] .acc-summary::after {
+  transform: rotate(180deg);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .day-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .day-divider {
+    width: 100%;
+    height: 2px;
+    min-height: 0;
+  }
+
+  .acc-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
