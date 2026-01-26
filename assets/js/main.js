@@ -55,6 +55,82 @@ onReady(() => {
     }
   })();
 
+  // ===== BRIQUE 4 — Transition douce entre pages =====
+  (function pageTransitions() {
+    const FADE_MS = 160;
+
+    function isSameOrigin(url) {
+      try {
+        return new URL(url, window.location.href).origin === window.location.origin;
+      } catch {
+        return false;
+      }
+    }
+
+    function isInternalHtmlNavigation(href) {
+      if (!href) return false;
+
+      // Ancres internes -> pas de transition page
+      if (href.startsWith("#")) return false;
+
+      // Mail / tel
+      if (href.startsWith("mailto:") || href.startsWith("tel:")) return false;
+
+      // Externe
+      if (!isSameOrigin(href)) return false;
+
+      // Si c'est juste un query change sur la même page, on ignore
+      const u = new URL(href, window.location.href);
+      if (u.pathname === window.location.pathname && u.hash) return false;
+
+      return true;
+    }
+
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest("a[href]");
+      if (!a) return;
+
+      const href = a.getAttribute("href");
+      if (!href) return;
+
+      // Respect new tab
+      if (a.target === "_blank") return;
+
+      // Download
+      if (a.hasAttribute("download")) return;
+
+      // Scroll doux ancres: géré plus bas
+      if (href.startsWith("#")) return;
+
+      if (!isInternalHtmlNavigation(href)) return;
+
+      // Ne pas casser les clics avec modificateurs (Ctrl/Cmd/Shift)
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+      e.preventDefault();
+
+      const page = document.querySelector(".page-content") || document.body;
+
+      // Fade out rapide + léger
+      page.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
+      page.style.opacity = "0";
+      page.style.transform = "translateY(6px)";
+
+      window.setTimeout(() => {
+        window.location.href = href;
+      }, FADE_MS);
+    });
+
+    // Si l'utilisateur revient en arrière, on force l'opacité normale
+    window.addEventListener("pageshow", () => {
+      const page = document.querySelector(".page-content");
+      if (!page) return;
+      page.style.opacity = "";
+      page.style.transform = "";
+      page.style.transition = "";
+    });
+  })();
+
   // Scroll doux pour ancres internes
   document.addEventListener("click", e => {
     const a = e.target.closest('a[href^="#"]');
@@ -99,24 +175,18 @@ onReady(() => {
       img.src = src;
     });
 
-    // Helper: relance l’animation Ken Burns (CSS) proprement
     function restartKenBurns() {
-      // Toggle une classe qui force l’animation à redémarrer
       document.body.classList.remove("bg-kenburns");
-      // Force reflow
       void document.body.offsetHeight;
       document.body.classList.add("bg-kenburns");
     }
 
-    // Initialise
     document.body.style.setProperty("--bg1", `url("${cssImages[0]}")`);
     document.body.style.setProperty("--bg2", `url("${cssImages[1 % cssImages.length]}")`);
     document.body.classList.remove("bg-fade");
 
-    // Démarre Ken Burns
     restartKenBurns();
 
-    // Durée totale
     const totalMs = (() => {
       const v = getComputedStyle(document.documentElement)
         .getPropertyValue("--bg-slideshow-duration")
@@ -145,8 +215,6 @@ onReady(() => {
       }
 
       showSecond = !showSecond;
-
-      // Relance le Ken Burns à chaque changement d’image
       restartKenBurns();
     }, stepMs);
   })();
