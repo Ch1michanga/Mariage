@@ -14,27 +14,88 @@
 
 <body>
   <main class="page-content">
-    <div class="container grid grid-3">
-      <article class="card">
+    <div class="container">
+      <div class="card">
         <h1>Programme</h1>
-        <p class="lead">Timing, brunch, activités, hébergements conseillés.</p>
-      </article>
+        <p class="lead">Clique sur un jour pour afficher les détails.</p>
+      </div>
 
-      <article class="card">
-        <h2>Vendredi</h2>
-        <ul>
-          <li>Accueil des invités</li>
-          <li>Dîner informel</li>
-        </ul>
-      </article>
+      <div class="accordion">
 
-      <article class="card">
-        <h2>Samedi</h2>
-        <ul>
-          <li>Cérémonie</li>
-          <li>Apéritif · Dîner · Soirée</li>
-        </ul>
-      </article>
+        <details class="acc card" open>
+          <summary class="acc-summary">
+            <span class="acc-title">Vendredi</span>
+            <span class="acc-sub">Accueil, repas, première soirée</span>
+          </summary>
+
+          <div class="day-grid">
+            <div class="day-left">
+              <p>Accueil des invités, installation et soirée détendue pour se retrouver.</p>
+              <p class="small">Lieu exact et détails pratiques à confirmer.</p>
+            </div>
+
+            <div class="day-divider" aria-hidden="true"></div>
+
+            <div class="day-right">
+              <ul class="timeline">
+                <li><span class="time">18h00</span><span class="item">Arrivée, check in</span></li>
+                <li><span class="time">19h30</span><span class="item">Repas</span></li>
+                <li><span class="time">21h30</span><span class="item">Danse</span></li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc card">
+          <summary class="acc-summary">
+            <span class="acc-title">Samedi</span>
+            <span class="acc-sub">Cérémonie, apéritif, dîner, soirée</span>
+          </summary>
+
+          <div class="day-grid">
+            <div class="day-left">
+              <p>La journée du mariage: cérémonie, apéritif, dîner et grande soirée.</p>
+              <p class="small">Prévoir une tenue chic et confortable.</p>
+            </div>
+
+            <div class="day-divider" aria-hidden="true"></div>
+
+            <div class="day-right">
+              <ul class="timeline">
+                <li><span class="time">15h30</span><span class="item">Cérémonie</span></li>
+                <li><span class="time">17h00</span><span class="item">Apéritif</span></li>
+                <li><span class="time">20h00</span><span class="item">Dîner</span></li>
+                <li><span class="time">22h00</span><span class="item">Soirée</span></li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <details class="acc card">
+          <summary class="acc-summary">
+            <span class="acc-title">Dimanche</span>
+            <span class="acc-sub">Brunch et détente</span>
+          </summary>
+
+          <div class="day-grid">
+            <div class="day-left">
+              <p>Brunch et moment chill pour se dire au revoir tranquillement.</p>
+              <p class="small">Départ libre dans l’après midi.</p>
+            </div>
+
+            <div class="day-divider" aria-hidden="true"></div>
+
+            <div class="day-right">
+              <ul class="timeline">
+                <li><span class="time">11h00</span><span class="item">Brunch</span></li>
+                <li><span class="time">13h00</span><span class="item">Piscine, détente</span></li>
+                <li><span class="time">16h00</span><span class="item">Départs</span></li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+      </div>
     </div>
   </main>
 </body>
