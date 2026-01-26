@@ -63,7 +63,7 @@ body {
   }
 }
 
-/* Background global smooth */
+/* ===== Background global smooth + Ken Burns ===== */
 body::before,
 body::after {
   content: "";
@@ -76,6 +76,10 @@ body::after {
   background-repeat: no-repeat;
 
   pointer-events: none;
+
+  /* Ken Burns: base state */
+  transform: scale(1);
+  will-change: transform, opacity;
 }
 
 body::before {
@@ -92,6 +96,28 @@ body::after {
 
 body.bg-fade::before { opacity: 0; }
 body.bg-fade::after  { opacity: 1; }
+
+/* Ken Burns animation déclenchée par JS */
+@keyframes kenBurnsSoft {
+  from { transform: scale(1); }
+  to   { transform: scale(1.04); }
+}
+
+/* Le JS ajoute/retire bg-kenburns pour relancer l’animation */
+body.bg-kenburns::before,
+body.bg-kenburns::after {
+  animation: kenBurnsSoft var(--bg-slideshow-duration) linear forwards;
+}
+
+/* Respect des préférences utilisateur */
+@media (prefers-reduced-motion: reduce) {
+  .page-content { animation: none; opacity: 1; transform: none; }
+  body.bg-kenburns::before,
+  body.bg-kenburns::after {
+    animation: none;
+    transform: scale(1);
+  }
+}
 
 body > * { position: relative; z-index: 2; }
 
