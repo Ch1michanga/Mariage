@@ -14,19 +14,16 @@
   --hero-slide-interval: 5000ms;
   --hero-fade-duration: 1.5s;
 
-  /* Fallback si JS tarde */
   --bg1: url("../img/backgrounds/IMG_20160713_175342.jpg");
   --bg2: url("../img/backgrounds/Les_Domaines_de_Patras_Le_Domaine-001.jpg");
 
-  /* Nav motion */
   --nav-transition: 200ms;
 }
 
 * { box-sizing: border-box; }
-
 html, body { height: 100%; }
 
-/* Voile beige */
+/* Voile beige global */
 html::after {
   content: "";
   position: fixed;
@@ -49,7 +46,22 @@ body {
   flex-direction: column;
 }
 
-.page-content { flex: 1; display: block; }
+/* ===== BRIQUE 1 — Fade-in premium ===== */
+.page-content {
+  flex: 1;
+  display: block;
+
+  opacity: 0;
+  transform: translateY(8px);
+  animation: pageFadeIn 0.22s ease-out forwards;
+}
+
+@keyframes pageFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* Background global smooth */
 body::before,
@@ -64,7 +76,6 @@ body::after {
   background-repeat: no-repeat;
 
   pointer-events: none;
-  animation: none;
 }
 
 body::before {
@@ -85,7 +96,9 @@ body.bg-fade::after  { opacity: 1; }
 body > * { position: relative; z-index: 2; }
 
 /* Typography */
-h1, h2, h3, .brand, .kicker { font-family: 'Playfair Display', serif; }
+h1, h2, h3, .brand, .kicker {
+  font-family: 'Playfair Display', serif;
+}
 
 h1 {
   font-size: 2.5rem;
@@ -138,25 +151,22 @@ a:hover { color: var(--sage); }
   padding: 0;
 }
 
-/* Base link style */
 .nav-links a {
   position: relative;
   font-weight: 500;
   color: var(--charcoal);
-
   padding: 0.38rem 0.8rem;
   border-radius: 999px;
   border: 2px solid transparent;
-  text-decoration: none;
 
   transition:
-    color var(--nav-transition) ease,
-    background-color var(--nav-transition) ease,
-    border-color var(--nav-transition) ease,
-    transform var(--nav-transition) ease;
+    color var(--nav-transition),
+    background-color var(--nav-transition),
+    border-color var(--nav-transition),
+    transform var(--nav-transition);
 }
 
-/* Underline subtil animé au hover */
+/* underline animé */
 .nav-links a::after {
   content: "";
   position: absolute;
@@ -165,12 +175,9 @@ a:hover { color: var(--sage); }
   bottom: 0.25rem;
   height: 2px;
   background: var(--sage);
-
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--nav-transition) ease;
-  border-radius: 999px;
-  opacity: 0.9;
+  transition: transform var(--nav-transition);
 }
 
 .nav-links a:hover {
@@ -182,36 +189,14 @@ a:hover { color: var(--sage); }
   transform: scaleX(1);
 }
 
-/* Actif: animation douce + pas d’underline (option premium) */
 .nav-links a.active {
   background: var(--sage);
   border-color: var(--sage);
   color: white;
-  transform: none;
 }
 
 .nav-links a.active::after {
   transform: scaleX(0);
-}
-
-/* Focus clavier propre */
-.nav-links a:focus,
-.nav-links a:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(138, 154, 91, 0.18);
-}
-
-/* Ancien style btn si encore présent */
-.nav-links .btn {
-  background: var(--sage);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-}
-
-.nav-links .btn:hover {
-  background: var(--gold);
-  color: white;
 }
 
 .nav-toggle { display: none; }
@@ -233,7 +218,7 @@ a:hover { color: var(--sage); }
 
 .center { text-align: center; }
 
-/* Hero */
+/* ===== BRIQUE 2 — Hero avec gradient subtil ===== */
 .hero {
   position: relative;
   height: 60vh;
@@ -250,13 +235,22 @@ a:hover { color: var(--sage); }
   text-align: center;
 }
 
+/* Gradient de lisibilité */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.15),
+    rgba(0,0,0,0.45)
+  );
+}
+
 .hero-content {
   position: relative;
   z-index: 2;
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-  border-radius: 0;
   max-width: 700px;
 }
 
@@ -285,82 +279,7 @@ a:hover { color: var(--sage); }
   color: white;
 }
 
-/* Map */
-.map-container {
-  position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
-  overflow: hidden;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-.map-container iframe {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  border: 0;
-}
-
-/* Forms */
-form label {
-  display: block;
-  margin: 1rem 0 0.5rem;
-  font-weight: 500;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-family: inherit;
-}
-
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(138, 154, 91, 0.1);
-}
-
-button[type="submit"] {
-  width: 100%;
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: var(--sage);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background var(--nav-transition);
-}
-
-button[type="submit"]:hover { background: var(--gold); }
-
-.notice {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  display: none;
-}
-
-.notice:not(:empty) { display: block; }
-
-.notice.success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.notice.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-/* Footer style identique au header */
+/* Footer */
 .site-footer {
   margin-top: auto;
   position: sticky;
@@ -375,47 +294,8 @@ button[type="submit"]:hover { background: var(--gold); }
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.footer-main {
-  margin: 0;
-  color: var(--charcoal);
-  font-size: 0.95rem;
-}
-
-.footer-sub {
-  margin: 0.25rem 0 0;
-  color: #777;
-  font-size: 0.85rem;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   .nav-links { display: none; }
-
-  /* mobile: style plus discret */
-  .nav-links a {
-    padding: 0.32rem 0.7rem;
-    border-width: 1px;
-  }
-
-  .nav-links a::after {
-    left: 0.7rem;
-    right: 0.7rem;
-    height: 2px;
-    bottom: 0.22rem;
-  }
-
-  .hero-content { margin: 0 1rem; }
-
-  .site-footer { padding: 0.85rem 1rem; }
-
-  .footer-main { font-size: 0.9rem; }
-  .footer-sub  { font-size: 0.8rem; }
-
   h1 { font-size: 2rem; }
 }
