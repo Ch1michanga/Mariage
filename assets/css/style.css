@@ -1,45 +1,38 @@
 /* Palette & thèmes — Provence (Sage, Gold, Cream) */
 :root {
-  --beige: #F9F7F2;     /* Cream background */
-  --ivory: #FFFFFF;     /* Cards */
-  --sage: #8A9A5B;      /* Primary accent */
-  --gold: #C5A059;      /* Secondary accent */
-  --charcoal: #333333;  /* Text */
+  --beige: #F9F7F2;
+  --ivory: #FFFFFF;
+  --sage: #8A9A5B;
+  --gold: #C5A059;
+  --charcoal: #333333;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   --radius: 12px;
 
-  /* Slideshow global background */
   --bg-slideshow-duration: 60s;
-
-  /* plus grand = plus l'image est visible (voile beige plus léger) */
   --bg-opacity: 0.50;
 
-  /* Home hero slideshow (plus utilisé maintenant, mais on garde les vars) */
   --hero-slide-interval: 5000ms;
   --hero-fade-duration: 1.5s;
 
-  /* Fallback au cas où JS ne charge pas immédiatement */
+  /* Fallback si JS tarde */
   --bg1: url("../img/backgrounds/IMG_20160713_175342.jpg");
   --bg2: url("../img/backgrounds/Les_Domaines_de_Patras_Le_Domaine-001.jpg");
+
+  /* Nav motion */
+  --nav-transition: 200ms;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body {
-  height: 100%;
-}
+html, body { height: 100%; }
 
-/* Voile beige indépendant du slideshow (toujours présent) */
+/* Voile beige */
 html::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-
   background: rgba(249, 247, 242, calc(1 - var(--bg-opacity)));
 }
 
@@ -47,9 +40,7 @@ body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--charcoal);
-
   background: transparent;
-
   line-height: 1.6;
   position: relative;
 
@@ -58,16 +49,9 @@ body {
   flex-direction: column;
 }
 
-/* Le contenu principal doit prendre la hauteur restante */
-.page-content {
-  flex: 1;
-  display: block;
-}
+.page-content { flex: 1; display: block; }
 
-/* ===== Background global smooth (piloté par main.js) =====
-   ::before et ::after = 2 couches d'images (crossfade)
-   Le voile beige est sur html::after
-*/
+/* Background global smooth */
 body::before,
 body::after {
   content: "";
@@ -83,38 +67,25 @@ body::after {
   animation: none;
 }
 
-/* Couche 1 */
 body::before {
   opacity: 1;
   background-image: var(--bg1);
   transition: opacity 1.2s ease-in-out;
 }
 
-/* Couche 2 */
 body::after {
   opacity: 0;
   background-image: var(--bg2);
   transition: opacity 1.2s ease-in-out;
 }
 
-/* Quand on fade vers la couche 2 */
 body.bg-fade::before { opacity: 0; }
 body.bg-fade::after  { opacity: 1; }
 
-/* Tout le contenu au-dessus du fond + voile */
-body > * {
-  position: relative;
-  z-index: 2;
-}
+body > * { position: relative; z-index: 2; }
 
 /* Typography */
-h1,
-h2,
-h3,
-.brand,
-.kicker {
-  font-family: 'Playfair Display', serif;
-}
+h1, h2, h3, .brand, .kicker { font-family: 'Playfair Display', serif; }
 
 h1 {
   font-size: 2.5rem;
@@ -131,22 +102,23 @@ h2 {
 a {
   color: var(--gold);
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color var(--nav-transition);
 }
 
-a:hover {
-  color: var(--sage);
-}
+a:hover { color: var(--sage); }
 
 /* Navigation */
 .site-nav {
   position: sticky;
   top: 0;
   z-index: 100;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 1rem 2rem;
+
   background: rgba(249, 247, 242, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -160,41 +132,76 @@ a:hover {
 
 .nav-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.25rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* Base link style */
 .nav-links a {
+  position: relative;
   font-weight: 500;
   color: var(--charcoal);
-  padding: 0.35rem 0.75rem;
+
+  padding: 0.38rem 0.8rem;
   border-radius: 999px;
   border: 2px solid transparent;
   text-decoration: none;
+
+  transition:
+    color var(--nav-transition) ease,
+    background-color var(--nav-transition) ease,
+    border-color var(--nav-transition) ease,
+    transform var(--nav-transition) ease;
+}
+
+/* Underline subtil animé au hover */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.25rem;
+  height: 2px;
+  background: var(--sage);
+
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--nav-transition) ease;
+  border-radius: 999px;
+  opacity: 0.9;
 }
 
 .nav-links a:hover {
   color: var(--sage);
+  transform: translateY(-1px);
 }
 
+.nav-links a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Actif: animation douce + pas d’underline (option premium) */
 .nav-links a.active {
   background: var(--sage);
   border-color: var(--sage);
   color: white;
+  transform: none;
 }
 
-.nav-links a.active:hover {
-  color: white;
+.nav-links a.active::after {
+  transform: scaleX(0);
 }
 
+/* Focus clavier propre */
 .nav-links a:focus,
 .nav-links a:focus-visible {
   outline: none;
+  box-shadow: 0 0 0 3px rgba(138, 154, 91, 0.18);
 }
 
-/* Ancien style "btn" si encore présent par erreur dans le header */
+/* Ancien style btn si encore présent */
 .nav-links .btn {
   background: var(--sage);
   color: white;
@@ -207,9 +214,7 @@ a:hover {
   color: white;
 }
 
-.nav-toggle {
-  display: none;
-}
+.nav-toggle { display: none; }
 
 /* Layout */
 .container {
@@ -226,9 +231,7 @@ a:hover {
   margin-bottom: 2rem;
 }
 
-.center {
-  text-align: center;
-}
+.center { text-align: center; }
 
 /* Hero */
 .hero {
@@ -238,14 +241,15 @@ a:hover {
   border-radius: var(--radius);
   overflow: hidden;
   margin-bottom: 2rem;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   color: white;
   text-align: center;
 }
 
-/* Hero content (sans cadre blanc) */
 .hero-content {
   position: relative;
   z-index: 2;
@@ -256,7 +260,6 @@ a:hover {
   max-width: 700px;
 }
 
-/* Texte lisible sur photo */
 .hero-content h1,
 .hero-content p,
 .hero-content .kicker {
@@ -294,10 +297,8 @@ a:hover {
 
 .map-container iframe {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   border: 0;
 }
 
@@ -308,9 +309,7 @@ form label {
   font-weight: 500;
 }
 
-input,
-select,
-textarea {
+input, select, textarea {
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
@@ -318,9 +317,7 @@ textarea {
   font-family: inherit;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
+input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--sage);
   box-shadow: 0 0 0 3px rgba(138, 154, 91, 0.1);
@@ -337,12 +334,10 @@ button[type="submit"] {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background var(--nav-transition);
 }
 
-button[type="submit"]:hover {
-  background: var(--gold);
-}
+button[type="submit"]:hover { background: var(--gold); }
 
 .notice {
   padding: 1rem;
@@ -351,9 +346,7 @@ button[type="submit"]:hover {
   display: none;
 }
 
-.notice:not(:empty) {
-  display: block;
-}
+.notice:not(:empty) { display: block; }
 
 .notice.success {
   background: #d4edda;
@@ -402,27 +395,27 @@ button[type="submit"]:hover {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .nav-links {
-    display: none;
+  .nav-links { display: none; }
+
+  /* mobile: style plus discret */
+  .nav-links a {
+    padding: 0.32rem 0.7rem;
+    border-width: 1px;
   }
 
-  .hero-content {
-    margin: 0 1rem;
+  .nav-links a::after {
+    left: 0.7rem;
+    right: 0.7rem;
+    height: 2px;
+    bottom: 0.22rem;
   }
 
-  .site-footer {
-    padding: 0.85rem 1rem;
-  }
+  .hero-content { margin: 0 1rem; }
 
-  .footer-main {
-    font-size: 0.9rem;
-  }
+  .site-footer { padding: 0.85rem 1rem; }
 
-  .footer-sub {
-    font-size: 0.8rem;
-  }
+  .footer-main { font-size: 0.9rem; }
+  .footer-sub  { font-size: 0.8rem; }
 
-  h1 {
-    font-size: 2rem;
-  }
+  h1 { font-size: 2rem; }
 }
