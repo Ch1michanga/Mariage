@@ -42,7 +42,6 @@ onReady(() => {
 
         const hrefFile = href.split("#")[0].split("?")[0].toLowerCase();
 
-        // Reset propre
         a.classList.remove("active");
         a.removeAttribute("aria-current");
 
@@ -64,7 +63,7 @@ onReady(() => {
     document.querySelector(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" });
   });
 
-  // Background slideshow global smooth
+  // Background slideshow global smooth + Ken Burns subtil
   (function backgroundCrossfade() {
     const files = [
       "IMG_20160713_175342.jpg",
@@ -84,8 +83,7 @@ onReady(() => {
     // Chemins pour le préchargement (résolus depuis les pages HTML)
     const preloadImages = files.map(f => `assets/img/backgrounds/${f}`);
 
-    // Micro perf: preload explicite des 2 premières images
-    // (ça réduit les flash sur mobile)
+    // Preload explicite des 2 premières images
     [preloadImages[0], preloadImages[1]].forEach(href => {
       if (!href) return;
       const link = document.createElement("link");
@@ -95,16 +93,28 @@ onReady(() => {
       document.head.appendChild(link);
     });
 
-    // Précharge JS (buffer)
+    // Précharge buffer
     preloadImages.forEach(src => {
       const img = new Image();
       img.src = src;
     });
 
-    // Initialise les 2 couches
+    // Helper: relance l’animation Ken Burns (CSS) proprement
+    function restartKenBurns() {
+      // Toggle une classe qui force l’animation à redémarrer
+      document.body.classList.remove("bg-kenburns");
+      // Force reflow
+      void document.body.offsetHeight;
+      document.body.classList.add("bg-kenburns");
+    }
+
+    // Initialise
     document.body.style.setProperty("--bg1", `url("${cssImages[0]}")`);
     document.body.style.setProperty("--bg2", `url("${cssImages[1 % cssImages.length]}")`);
     document.body.classList.remove("bg-fade");
+
+    // Démarre Ken Burns
+    restartKenBurns();
 
     // Durée totale
     const totalMs = (() => {
@@ -135,6 +145,9 @@ onReady(() => {
       }
 
       showSecond = !showSecond;
+
+      // Relance le Ken Burns à chaque changement d’image
+      restartKenBurns();
     }, stepMs);
   })();
 });
