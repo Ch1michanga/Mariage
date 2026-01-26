@@ -9,7 +9,7 @@ function onReady(fn) {
 }
 
 onReady(() => {
-  // Charge header/footer et active le menu mobile
+  // Charge header/footer
   (async function includePartials() {
     try {
       const [h, f] = await Promise.all([
@@ -24,12 +24,6 @@ onReady(() => {
       const footer = document.createElement("div");
       footer.innerHTML = f;
       document.body.appendChild(footer);
-
-      const toggle = document.querySelector(".nav-toggle");
-      const links = document.querySelector(".nav-links");
-      if (toggle && links) {
-        toggle.addEventListener("click", () => links.classList.toggle("open"));
-      }
 
       // Page active + accessibilité
       const path = window.location.pathname;
@@ -55,82 +49,6 @@ onReady(() => {
     }
   })();
 
-  // ===== BRIQUE 4 — Transition douce entre pages =====
-  (function pageTransitions() {
-    const FADE_MS = 160;
-
-    function isSameOrigin(url) {
-      try {
-        return new URL(url, window.location.href).origin === window.location.origin;
-      } catch {
-        return false;
-      }
-    }
-
-    function isInternalHtmlNavigation(href) {
-      if (!href) return false;
-
-      // Ancres internes -> pas de transition page
-      if (href.startsWith("#")) return false;
-
-      // Mail / tel
-      if (href.startsWith("mailto:") || href.startsWith("tel:")) return false;
-
-      // Externe
-      if (!isSameOrigin(href)) return false;
-
-      // Si c'est juste un query change sur la même page, on ignore
-      const u = new URL(href, window.location.href);
-      if (u.pathname === window.location.pathname && u.hash) return false;
-
-      return true;
-    }
-
-    document.addEventListener("click", (e) => {
-      const a = e.target.closest("a[href]");
-      if (!a) return;
-
-      const href = a.getAttribute("href");
-      if (!href) return;
-
-      // Respect new tab
-      if (a.target === "_blank") return;
-
-      // Download
-      if (a.hasAttribute("download")) return;
-
-      // Scroll doux ancres: géré plus bas
-      if (href.startsWith("#")) return;
-
-      if (!isInternalHtmlNavigation(href)) return;
-
-      // Ne pas casser les clics avec modificateurs (Ctrl/Cmd/Shift)
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-
-      e.preventDefault();
-
-      const page = document.querySelector(".page-content") || document.body;
-
-      // Fade out rapide + léger
-      page.style.transition = `opacity ${FADE_MS}ms ease, transform ${FADE_MS}ms ease`;
-      page.style.opacity = "0";
-      page.style.transform = "translateY(6px)";
-
-      window.setTimeout(() => {
-        window.location.href = href;
-      }, FADE_MS);
-    });
-
-    // Si l'utilisateur revient en arrière, on force l'opacité normale
-    window.addEventListener("pageshow", () => {
-      const page = document.querySelector(".page-content");
-      if (!page) return;
-      page.style.opacity = "";
-      page.style.transform = "";
-      page.style.transition = "";
-    });
-  })();
-
   // Scroll doux pour ancres internes
   document.addEventListener("click", e => {
     const a = e.target.closest('a[href^="#"]');
@@ -153,10 +71,7 @@ onReady(() => {
 
     if (!files.length) return;
 
-    // Chemins pour le CSS (résolus depuis assets/css/style.css)
     const cssImages = files.map(f => `../img/backgrounds/${f}`);
-
-    // Chemins pour le préchargement (résolus depuis les pages HTML)
     const preloadImages = files.map(f => `assets/img/backgrounds/${f}`);
 
     // Preload explicite des 2 premières images
