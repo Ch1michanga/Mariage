@@ -31,6 +31,7 @@ onReady(() => {
         toggle.addEventListener("click", () => links.classList.toggle("open"));
       }
 
+      // Page active + accessibilité
       const path = window.location.pathname;
       const currentFile =
         path.endsWith("/") || path === "" ? "index.html" : path.split("/").pop().toLowerCase();
@@ -38,8 +39,17 @@ onReady(() => {
       document.querySelectorAll(".nav-links a[href]").forEach(a => {
         const href = a.getAttribute("href");
         if (!href) return;
+
         const hrefFile = href.split("#")[0].split("?")[0].toLowerCase();
-        if (hrefFile === currentFile) a.classList.add("active");
+
+        // Reset propre
+        a.classList.remove("active");
+        a.removeAttribute("aria-current");
+
+        if (hrefFile === currentFile) {
+          a.classList.add("active");
+          a.setAttribute("aria-current", "page");
+        }
       });
     } catch (e) {
       console.error("Error loading partials:", e);
@@ -56,7 +66,6 @@ onReady(() => {
 
   // Background slideshow global smooth
   (function backgroundCrossfade() {
-    // Noms de fichiers
     const files = [
       "IMG_20160713_175342.jpg",
       "Les_Domaines_de_Patras_Instagram-001-6.jpg",
@@ -69,13 +78,24 @@ onReady(() => {
 
     if (!files.length) return;
 
-    // 1) Chemins pour le CSS (résolus depuis assets/css/style.css)
+    // Chemins pour le CSS (résolus depuis assets/css/style.css)
     const cssImages = files.map(f => `../img/backgrounds/${f}`);
 
-    // 2) Chemins pour le préchargement (résolus depuis les pages HTML)
+    // Chemins pour le préchargement (résolus depuis les pages HTML)
     const preloadImages = files.map(f => `assets/img/backgrounds/${f}`);
 
-    // Précharge
+    // Micro perf: preload explicite des 2 premières images
+    // (ça réduit les flash sur mobile)
+    [preloadImages[0], preloadImages[1]].forEach(href => {
+      if (!href) return;
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = href;
+      document.head.appendChild(link);
+    });
+
+    // Précharge JS (buffer)
     preloadImages.forEach(src => {
       const img = new Image();
       img.src = src;
