@@ -1,47 +1,78 @@
-// assets/js/rsvp.js
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-const ENDPOINT = "https://script.google.com/macros/s/AKfycbwWsOFd3js3FoM-MXs69YDpFO3LOEMINWNDB3f6_ksRspTWwRHTq4OCBBn6JAr8-QIhcw/exec";
+  <title>RSVP — Marc & Marie-Frédérique</title>
+  <meta name="description" content="RSVP mariage Marc & Marie-Frédérique" />
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("rsvp-form");
-  const status = document.getElementById("rsvp-status");
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
-  if (!form) return;
+  <script src="assets/js/loader.js"></script>
+  <script defer src="assets/js/rsvp.js"></script>
+</head>
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+<body>
 
-    status.textContent = "Envoi en cours…";
-    status.classList.remove("is-error", "is-success");
+  <main class="page-content">
+    <div class="container">
+      <div class="card">
 
-    const fd = new FormData(form);
+        <h1>RSVP</h1>
+        <p class="lead">Merci de confirmer votre présence.</p>
 
-    try {
-      const res = await fetch(ENDPOINT, {
-        method: "POST",
-        body: new URLSearchParams(fd),
-      });
+        <!-- STATUT -->
+        <div id="rsvp-status" class="notice" aria-live="polite"></div>
 
-      const text = await res.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        data = null;
-      }
+        <!-- FORMULAIRE -->
+        <form id="rsvp-form">
 
-      if (!res.ok || !data || data.ok !== true) {
-        throw new Error((data && data.message) ? data.message : text);
-      }
+          <label for="nom">Nom complet *</label>
+          <input id="nom" name="nom" required />
 
-      status.textContent = "Merci, votre réponse a bien été enregistrée.";
-      status.classList.add("is-success");
-      form.reset();
+          <label for="email">Email *</label>
+          <input id="email" name="email" type="email" required />
 
-    } catch (err) {
-      status.textContent = "Erreur lors de l’envoi. Merci de réessayer.";
-      status.classList.add("is-error");
-      console.error(err);
-    }
-  });
-});
+          <label for="guests">Nombre de personnes</label>
+          <select id="guests" name="guests">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+
+          <label for="presence">Présence</label>
+          <select id="presence" name="presence">
+            <option value="vendredi">Oui, dès le vendredi</option>
+            <option value="samedi">Oui, à partir du samedi</option>
+            <option value="non">Malheureusement non</option>
+          </select>
+
+          <label for="dinner_samedi">Préférence pour le dîner du samedi soir</label>
+          <select id="dinner_samedi" name="dinner_samedi">
+            <option value="viande">Menu viande</option>
+            <option value="vegetarien">Menu végétarien (poisson ou sans viande)</option>
+          </select>
+
+          <label for="diet">Régimes alimentaires / allergies</label>
+          <textarea id="diet" name="diet" rows="3" placeholder="Ex.: sans gluten…"></textarea>
+
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="3"></textarea>
+
+          <div class="small">* Champs obligatoires</div>
+
+          <button type="submit">Envoyer ma réponse</button>
+
+        </form>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
