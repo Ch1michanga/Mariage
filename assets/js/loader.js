@@ -1,11 +1,11 @@
 // assets/js/loader.js
 
-const VERSION = "3.30"; // incrémente uniquement ce chiffre
-
-// Expose la version si besoin
+const VERSION = "3.31"; // incrémente uniquement ce chiffre
 window.ASSET_VERSION = VERSION;
 
-// CSS
+// -----------------------------
+// Charger le CSS
+// -----------------------------
 (function addCSS() {
   const link = document.createElement("link");
   link.rel = "stylesheet";
@@ -13,10 +13,37 @@ window.ASSET_VERSION = VERSION;
   document.head.appendChild(link);
 })();
 
-// JS principal
+// -----------------------------
+// Charger le JS principal
+// -----------------------------
 (function addMain() {
   const script = document.createElement("script");
   script.defer = true;
   script.src = `assets/js/main.js?v=${VERSION}`;
   document.head.appendChild(script);
 })();
+
+// -----------------------------
+// Injecter Header + Footer
+// -----------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  loadPartial("partials/header.html", "site-header");
+  loadPartial("partials/footer.html", "site-footer");
+});
+
+function loadPartial(url, targetId) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  fetch(`${url}?v=${VERSION}`)
+    .then(res => {
+      if (!res.ok) throw new Error(`Erreur chargement ${url}`);
+      return res.text();
+    })
+    .then(html => {
+      target.innerHTML = html;
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
