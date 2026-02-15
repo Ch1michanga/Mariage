@@ -759,4 +759,30 @@ button[type="submit"]:hover {
   }
 }
 
+@media (max-width: 860px){
+  .nav-toggle{ display: inline-flex !important; }
+
+  .site-nav{
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    height: 100vh !important;
+    width: min(86vw, 340px) !important;
+    transform: translateX(105%) !important;
+    transition: transform 260ms ease !important;
+    padding: 72px 18px 22px !important;
+    z-index: 45 !important;
+  }
+
+  body.nav-open .site-nav{
+    transform: translateX(0) !important;
+  }
+
+  .site-nav-inner{
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+}
+
 
