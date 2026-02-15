@@ -622,3 +622,8 @@ button[type="submit"]:hover{
     transform:translateY(-6px) rotate(-45deg);
   }
 }
+/* Forcer une seule colonne pour Lieu et Hébergements */
+body.page-stack .grid-2{
+  grid-template-columns:1fr;
+}
+
