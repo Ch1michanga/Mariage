@@ -9,47 +9,83 @@ function onReady(fn) {
 }
 
 onReady(() => {
-  // Charge header/footer
-  (async function includePartials() {
-    try {
-      const [h, f] = await Promise.all([
-        fetch("partials/header.html").then(r => r.text()),
-        fetch("partials/footer.html").then(r => r.text())
-      ]);
+  // -----------------------------
+  // NAV : page active
+  // -----------------------------
+  (function setActiveNav() {
+    const path = window.location.pathname;
+    const currentFile =
+      path.endsWith("/") || path === "" ? "index.html" : path.split("/").pop().toLowerCase();
 
-      const header = document.createElement("div");
-      header.innerHTML = h;
-      document.body.prepend(header);
+    document.querySelectorAll(".nav-link[href]").forEach(a => {
+      const href = a.getAttribute("href");
+      if (!href) return;
 
-      const footer = document.createElement("div");
-      footer.innerHTML = f;
-      document.body.appendChild(footer);
+      const hrefFile = href.split("#")[0].split("?")[0].toLowerCase();
 
-      // Page active + accessibilité
-      const path = window.location.pathname;
-      const currentFile =
-        path.endsWith("/") || path === "" ? "index.html" : path.split("/").pop().toLowerCase();
+      a.classList.remove("is-active");
+      a.removeAttribute("aria-current");
 
-      document.querySelectorAll(".nav-links a[href]").forEach(a => {
-        const href = a.getAttribute("href");
-        if (!href) return;
-
-        const hrefFile = href.split("#")[0].split("?")[0].toLowerCase();
-
-        a.classList.remove("active");
-        a.removeAttribute("aria-current");
-
-        if (hrefFile === currentFile) {
-          a.classList.add("active");
-          a.setAttribute("aria-current", "page");
-        }
-      });
-    } catch (e) {
-      console.error("Error loading partials:", e);
-    }
+      if (hrefFile === currentFile) {
+        a.classList.add("is-active");
+        a.setAttribute("aria-current", "page");
+      }
+    });
   })();
 
+  // -----------------------------
+  // NAV : burger mobile
+  // -----------------------------
+  (function initMobileNav() {
+    const toggle = document.querySelector(".nav-toggle");
+    const nav = document.querySelector("#site-nav");
+    const backdrop = document.querySelector(".nav-backdrop");
+
+    // Si pas de header injecté encore, on réessaie une fois après un tick
+    if (!toggle || !nav || !backdrop) {
+      setTimeout(initMobileNav, 50);
+      return;
+    }
+
+    function openNav() {
+      document.body.classList.add("nav-open");
+      backdrop.hidden = false;
+      toggle.setAttribute("aria-expanded", "true");
+    }
+
+    function closeNav() {
+      document.body.classList.remove("nav-open");
+      backdrop.hidden = true;
+      toggle.setAttribute("aria-expanded", "false");
+    }
+
+    function isOpen() {
+      return document.body.classList.contains("nav-open");
+    }
+
+    toggle.addEventListener("click", () => {
+      if (isOpen()) closeNav();
+      else openNav();
+    });
+
+    backdrop.addEventListener("click", closeNav);
+
+    document.querySelectorAll("#site-nav a").forEach(a => {
+      a.addEventListener("click", closeNav);
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && isOpen()) closeNav();
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 860 && isOpen()) closeNav();
+    });
+  })();
+
+  // -----------------------------
   // Scroll doux pour ancres internes
+  // -----------------------------
   document.addEventListener("click", e => {
     const a = e.target.closest('a[href^="#"]');
     if (!a) return;
@@ -57,7 +93,9 @@ onReady(() => {
     document.querySelector(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" });
   });
 
+  // -----------------------------
   // Background slideshow global smooth + Ken Burns subtil
+  // -----------------------------
   (function backgroundCrossfade() {
     const files = [
       "IMG_20160713_175342.jpg",
@@ -74,7 +112,6 @@ onReady(() => {
     const cssImages = files.map(f => `../img/backgrounds/${f}`);
     const preloadImages = files.map(f => `assets/img/backgrounds/${f}`);
 
-    // Preload explicite des 2 premières images
     [preloadImages[0], preloadImages[1]].forEach(href => {
       if (!href) return;
       const link = document.createElement("link");
@@ -84,7 +121,6 @@ onReady(() => {
       document.head.appendChild(link);
     });
 
-    // Précharge buffer
     preloadImages.forEach(src => {
       const img = new Image();
       img.src = src;
