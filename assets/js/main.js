@@ -10,9 +10,25 @@ function onReady(fn) {
 
 onReady(() => {
   // -----------------------------
+  // NAV : attendre que le header injecté existe
+  // -----------------------------
+  function whenNavReady(cb, tries = 0) {
+    const ok =
+      document.querySelector(".nav-toggle") &&
+      document.querySelector("#site-nav") &&
+      document.querySelector(".nav-backdrop") &&
+      document.querySelectorAll(".nav-link").length > 0;
+
+    if (ok) return cb();
+
+    if (tries > 80) return; // stop après ~8s
+    setTimeout(() => whenNavReady(cb, tries + 1), 100);
+  }
+
+  // -----------------------------
   // NAV : page active
   // -----------------------------
-  (function setActiveNav() {
+  function setActiveNav() {
     const path = window.location.pathname;
     const currentFile =
       path.endsWith("/") || path === "" ? "index.html" : path.split("/").pop().toLowerCase();
@@ -31,21 +47,15 @@ onReady(() => {
         a.setAttribute("aria-current", "page");
       }
     });
-  })();
+  }
 
   // -----------------------------
   // NAV : burger mobile
   // -----------------------------
-  (function initMobileNav() {
+  function initMobileNav() {
     const toggle = document.querySelector(".nav-toggle");
     const nav = document.querySelector("#site-nav");
     const backdrop = document.querySelector(".nav-backdrop");
-
-    // Si pas de header injecté encore, on réessaie une fois après un tick
-    if (!toggle || !nav || !backdrop) {
-      setTimeout(initMobileNav, 50);
-      return;
-    }
 
     function openNav() {
       document.body.classList.add("nav-open");
@@ -62,6 +72,10 @@ onReady(() => {
     function isOpen() {
       return document.body.classList.contains("nav-open");
     }
+
+    // sécurité: état initial
+    backdrop.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
 
     toggle.addEventListener("click", () => {
       if (isOpen()) closeNav();
@@ -81,7 +95,13 @@ onReady(() => {
     window.addEventListener("resize", () => {
       if (window.innerWidth > 860 && isOpen()) closeNav();
     });
-  })();
+  }
+
+  // attendre injection puis init
+  whenNavReady(() => {
+    setActiveNav();
+    initMobileNav();
+  });
 
   // -----------------------------
   // Scroll doux pour ancres internes
