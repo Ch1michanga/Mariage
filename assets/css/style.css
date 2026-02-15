@@ -575,3 +575,31 @@ button[type="submit"]:hover {
     justify-content: flex-start;
   }
 }
+
+/* ===== HOME — Cadre titre allégé ===== */
+
+.intro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6vh 1rem 4vh;
+}
+
+.intro .card {
+  padding: 1.1rem 1.5rem;
+  max-width: 540px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.intro h1 {
+  margin-bottom: 0.4rem;
+}
+
+.intro .lead {
+  margin-top: 0.2rem;
+}
+
+
