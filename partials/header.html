@@ -1,17 +1,30 @@
-<nav class="site-nav">
-  <a class="brand" href="index.html">M & M F</a>
-  <button class="nav-toggle" aria-label="Ouvrir le menu">☰</button>
-  <ul class="nav-links">
-    <li><a href="index.html">Accueil</a></li>
-    <li><a href="programme.html">Programme</a></li>
-    <li><a href="rsvp.html">RSVP</a></li>
-    <li><a href="lieu.html">Le domaine & ses alentours</a></li>
-    <li><a href="hebergement.html">Hébergements et informations pratiques</a></li>
-    <li><a href="gallery.html">Galerie</a></li>
-  </ul>
+<header class="site-header">
+  <a class="brand" href="index.html" aria-label="Accueil">
+    <span class="brand-title">Marc & Marie Frédérique</span>
+  </a>
 
-</nav>
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-label="Ouvrir le menu"
+    aria-controls="site-nav"
+    aria-expanded="false"
+  >
+    <span class="nav-toggle-bar" aria-hidden="true"></span>
+    <span class="nav-toggle-bar" aria-hidden="true"></span>
+    <span class="nav-toggle-bar" aria-hidden="true"></span>
+  </button>
 
+  <nav id="site-nav" class="site-nav" aria-label="Navigation principale">
+    <div class="site-nav-inner">
+      <a class="nav-link" href="index.html">Accueil</a>
+      <a class="nav-link" href="lieu.html">Lieu</a>
+      <a class="nav-link" href="programme.html">Programme</a>
+      <a class="nav-link" href="rsvp.html">RSVP</a>
+      <a class="nav-link" href="hebergement.html">Liste</a>
+      <a class="nav-link" href="gallery.html">Galerie</a>
+    </div>
+  </nav>
 
-
-
+  <div class="nav-backdrop" hidden></div>
+</header>
