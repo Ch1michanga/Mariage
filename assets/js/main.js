@@ -21,7 +21,7 @@ onReady(() => {
 
     if (ok) return cb();
 
-    if (tries > 80) return; // stop après ~8s
+    if (tries > 80) return;
     setTimeout(() => whenNavReady(cb, tries + 1), 100);
   }
 
@@ -33,7 +33,7 @@ onReady(() => {
     const currentFile =
       path.endsWith("/") || path === "" ? "index.html" : path.split("/").pop().toLowerCase();
 
-    document.querySelectorAll(".nav-link[href]").forEach(a => {
+    document.querySelectorAll(".nav-link[href]").forEach((a) => {
       const href = a.getAttribute("href");
       if (!href) return;
 
@@ -50,50 +50,93 @@ onReady(() => {
   }
 
   // -----------------------------
-  // NAV : burger mobile
+  // NAV : burger mobile (corrigé)
   // -----------------------------
   function initMobileNav() {
     const toggle = document.querySelector(".nav-toggle");
     const nav = document.querySelector("#site-nav");
     const backdrop = document.querySelector(".nav-backdrop");
 
+    if (!toggle || !nav || !backdrop) return;
+
+    const MOBILE_MAX = 900;
+
+    function isMobile() {
+      return window.matchMedia(`(max-width: ${MOBILE_MAX}px)`).matches;
+    }
+
+    function setExpanded(value) {
+      toggle.setAttribute("aria-expanded", value ? "true" : "false");
+    }
+
     function openNav() {
+      if (!isMobile()) return;
       document.body.classList.add("nav-open");
+      nav.classList.add("is-open");
       backdrop.hidden = false;
-      toggle.setAttribute("aria-expanded", "true");
+      setExpanded(true);
     }
 
     function closeNav() {
       document.body.classList.remove("nav-open");
+      nav.classList.remove("is-open");
       backdrop.hidden = true;
-      toggle.setAttribute("aria-expanded", "false");
+      setExpanded(false);
     }
 
     function isOpen() {
       return document.body.classList.contains("nav-open");
     }
 
-    // sécurité: état initial
-    backdrop.hidden = true;
-    toggle.setAttribute("aria-expanded", "false");
+    // état initial propre
+    closeNav();
 
-    toggle.addEventListener("click", () => {
+    // clic burger
+    toggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (isOpen()) closeNav();
       else openNav();
     });
 
-    backdrop.addEventListener("click", closeNav);
+    // iOS parfois préfère touchstart
+    toggle.addEventListener(
+      "touchstart",
+      (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (isOpen()) closeNav();
+        else openNav();
+      },
+      { passive: false }
+    );
 
-    document.querySelectorAll("#site-nav a").forEach(a => {
-      a.addEventListener("click", closeNav);
+    // clic overlay ferme
+    backdrop.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeNav();
     });
 
-    document.addEventListener("keydown", e => {
+    // clic hors menu ferme
+    document.addEventListener("click", (e) => {
+      if (!isOpen()) return;
+      if (nav.contains(e.target) || toggle.contains(e.target)) return;
+      closeNav();
+    });
+
+    // clic sur lien ferme
+    nav.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => closeNav());
+    });
+
+    // escape ferme
+    document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && isOpen()) closeNav();
     });
 
+    // resize ferme quand on repasse desktop
     window.addEventListener("resize", () => {
-      if (window.innerWidth > 860 && isOpen()) closeNav();
+      if (!isMobile() && isOpen()) closeNav();
     });
   }
 
@@ -106,7 +149,7 @@ onReady(() => {
   // -----------------------------
   // Scroll doux pour ancres internes
   // -----------------------------
-  document.addEventListener("click", e => {
+  document.addEventListener("click", (e) => {
     const a = e.target.closest('a[href^="#"]');
     if (!a) return;
     e.preventDefault();
@@ -124,15 +167,15 @@ onReady(() => {
       "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-162-1-scaled.jpg",
       "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-165.jpeg",
       "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-639-scaled-1593x896.jpg",
-      "lac.jpg"
+      "lac.jpg",
     ];
 
     if (!files.length) return;
 
-    const cssImages = files.map(f => `../img/backgrounds/${f}`);
-    const preloadImages = files.map(f => `assets/img/backgrounds/${f}`);
+    const cssImages = files.map((f) => `../img/backgrounds/${f}`);
+    const preloadImages = files.map((f) => `assets/img/backgrounds/${f}`);
 
-    [preloadImages[0], preloadImages[1]].forEach(href => {
+    [preloadImages[0], preloadImages[1]].forEach((href) => {
       if (!href) return;
       const link = document.createElement("link");
       link.rel = "preload";
@@ -141,7 +184,7 @@ onReady(() => {
       document.head.appendChild(link);
     });
 
-    preloadImages.forEach(src => {
+    preloadImages.forEach((src) => {
       const img = new Image();
       img.src = src;
     });
