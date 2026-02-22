@@ -638,3 +638,63 @@ button[type="submit"]:hover{
 body.page-stack .grid-2{
   grid-template-columns:1fr;
 }
+
+/* FIX iPhone Safari menu au dessus du contenu */
+@media (max-width:860px){
+  #site-nav.site-nav{
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(86vw,340px);
+    z-index: 99999;
+
+    background: rgba(249,247,242,0.985);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    transform: translateX(105%);
+    transition: transform 260ms ease;
+
+    padding: 72px 18px 22px;
+    border-left: 1px solid rgba(0,0,0,0.06);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #site-nav.site-nav.is-open{
+    transform: translateX(0);
+  }
+
+  .nav-backdrop{
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+    background: rgba(0,0,0,0.35);
+  }
+
+  body.nav-open .nav-backdrop{
+    display: block;
+  }
+
+  /* vrai burger plus épais et joli */
+  .nav-toggle-bar{
+    width: 24px;
+    height: 3px;
+    margin: 5px 0;
+    background: rgba(0,0,0,0.80);
+    border-radius: 99px;
+  }
+
+  body.nav-open .nav-toggle-bar:nth-child(1){
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  body.nav-open .nav-toggle-bar:nth-child(2){
+    opacity: 0;
+  }
+
+  body.nav-open .nav-toggle-bar:nth-child(3){
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
