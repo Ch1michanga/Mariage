@@ -1,6 +1,6 @@
 // assets/js/loader.js
 
-const VERSION = "3.56"; // incrémente uniquement ce chiffre
+const VERSION = "3.57"; // incrémente uniquement ce chiffre
 window.ASSET_VERSION = VERSION;
 
 // CSS
