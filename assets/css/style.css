@@ -675,3 +675,25 @@ body.page-stack .grid-2{
     display: none !important;
   }
 }
+@media (min-width:861px){
+  #site-nav.site-nav{
+    position: static !important;
+    transform: none !important;
+    height: auto !important;
+    width: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    z-index: auto !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .site-nav-inner{
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+}
