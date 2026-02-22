@@ -645,3 +645,33 @@ button[type="submit"]:hover{
 body.page-stack .grid-2{
   grid-template-columns:1fr;
 }
+
+/* Restore nav buttons on desktop */
+@media (min-width:861px){
+  #site-nav.site-nav{
+    position: static;
+    height: auto;
+    width: auto;
+    transform: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    overflow: visible;
+    z-index: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .site-nav-inner{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-direction: row;
+  }
+
+  .nav-backdrop{
+    display: none !important;
+  }
+}
