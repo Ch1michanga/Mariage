@@ -50,7 +50,7 @@ onReady(() => {
   }
 
   // -----------------------------
-  // NAV : burger mobile (corrigé)
+  // NAV : burger mobile (fix iPhone)
   // -----------------------------
   function initMobileNav() {
     const toggle = document.querySelector(".nav-toggle");
@@ -59,7 +59,7 @@ onReady(() => {
 
     if (!toggle || !nav || !backdrop) return;
 
-    const MOBILE_MAX = 900;
+    const MOBILE_MAX = 860;
 
     function isMobile() {
       return window.matchMedia(`(max-width: ${MOBILE_MAX}px)`).matches;
@@ -67,6 +67,16 @@ onReady(() => {
 
     function setExpanded(value) {
       toggle.setAttribute("aria-expanded", value ? "true" : "false");
+    }
+
+    // FIX iPhone Safari
+    // On sort le panneau et le backdrop du header (sticky + backdrop-filter)
+    // pour garantir que position fixed est bien au dessus du contenu
+    if (nav.parentElement !== document.body) {
+      document.body.appendChild(nav);
+    }
+    if (backdrop.parentElement !== document.body) {
+      document.body.appendChild(backdrop);
     }
 
     function openNav() {
@@ -88,10 +98,8 @@ onReady(() => {
       return document.body.classList.contains("nav-open");
     }
 
-    // état initial propre
     closeNav();
 
-    // clic burger
     toggle.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -99,7 +107,6 @@ onReady(() => {
       else openNav();
     });
 
-    // iOS parfois préfère touchstart
     toggle.addEventListener(
       "touchstart",
       (e) => {
@@ -111,36 +118,24 @@ onReady(() => {
       { passive: false }
     );
 
-    // clic overlay ferme
     backdrop.addEventListener("click", (e) => {
       e.preventDefault();
       closeNav();
     });
 
-    // clic hors menu ferme
-    document.addEventListener("click", (e) => {
-      if (!isOpen()) return;
-      if (nav.contains(e.target) || toggle.contains(e.target)) return;
-      closeNav();
-    });
-
-    // clic sur lien ferme
-    nav.querySelectorAll("a").forEach((a) => {
-      a.addEventListener("click", () => closeNav());
-    });
-
-    // escape ferme
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && isOpen()) closeNav();
     });
 
-    // resize ferme quand on repasse desktop
+    nav.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => closeNav());
+    });
+
     window.addEventListener("resize", () => {
       if (!isMobile() && isOpen()) closeNav();
     });
   }
 
-  // attendre injection puis init
   whenNavReady(() => {
     setActiveNav();
     initMobileNav();
@@ -167,7 +162,7 @@ onReady(() => {
       "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-162-1-scaled.jpg",
       "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-165.jpeg",
       "Mariage-Caroline-Guilhem-Photo-by-Jeremie-Hkb-639-scaled-1593x896.jpg",
-      "lac.jpg",
+      "lac.jpg"
     ];
 
     if (!files.length) return;
