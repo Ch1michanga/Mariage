@@ -35,6 +35,7 @@ onReady(() => {
     document.querySelectorAll(".nav-link[href]").forEach((a) => {
       const href = a.getAttribute("href");
       if (!href) return;
+
       const hrefFile = href.split("#")[0].split("?")[0].toLowerCase();
 
       a.classList.remove("is-active");
@@ -48,18 +49,8 @@ onReady(() => {
   }
 
   whenNavReady((header, toggle, nav, backdrop) => {
-    const originalParent = nav.parentElement || header;
-    const originalNext = nav.nextElementSibling;
-
     function setExpanded(v) {
       toggle.setAttribute("aria-expanded", v ? "true" : "false");
-    }
-
-    function closeNav() {
-      document.body.classList.remove("nav-open");
-      nav.classList.remove("is-open");
-      backdrop.hidden = true;
-      setExpanded(false);
     }
 
     function openNav() {
@@ -70,37 +61,47 @@ onReady(() => {
       setExpanded(true);
     }
 
+    function closeNav() {
+      document.body.classList.remove("nav-open");
+      nav.classList.remove("is-open");
+      backdrop.hidden = true;
+      setExpanded(false);
+    }
+
     function isOpen() {
       return document.body.classList.contains("nav-open");
     }
 
-    function moveNavToBody() {
-      if (nav.parentElement !== document.body) document.body.appendChild(nav);
-      if (backdrop.parentElement !== document.body) document.body.appendChild(backdrop);
-    }
-
-    function moveNavBackToHeader() {
-      if (nav.parentElement !== originalParent) {
-        if (originalNext && originalNext.parentElement === originalParent) {
-          originalParent.insertBefore(nav, originalNext);
-        } else {
-          originalParent.appendChild(nav);
-        }
+    function placeDesktop() {
+      // Force le menu EXACTEMENT dans le header, juste après le bouton burger
+      if (nav.parentElement !== header) {
+        toggle.insertAdjacentElement("afterend", nav);
+      } else {
+        // même si déjà dans header, on garantit l ordre (burger puis nav)
+        const next = toggle.nextElementSibling;
+        if (next !== nav) toggle.insertAdjacentElement("afterend", nav);
       }
       closeNav();
     }
 
+    function placeMobile() {
+      // iPhone Safari: menu + backdrop au niveau body
+      if (nav.parentElement !== document.body) document.body.appendChild(nav);
+      if (backdrop.parentElement !== document.body) document.body.appendChild(backdrop);
+    }
+
     function syncPlacement() {
-      if (isMobile()) moveNavToBody();
-      else moveNavBackToHeader();
+      if (isMobile()) placeMobile();
+      else placeDesktop();
     }
 
     setActiveNav();
     closeNav();
     syncPlacement();
 
+    // re sync après injection tardive
     setTimeout(syncPlacement, 0);
-    setTimeout(syncPlacement, 200);
+    setTimeout(syncPlacement, 250);
 
     toggle.addEventListener("click", (e) => {
       e.preventDefault();
