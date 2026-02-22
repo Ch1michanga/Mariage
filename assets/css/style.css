@@ -288,3 +288,6 @@ body.nav-open .line-bottom{
   border-top:1px solid rgba(0,0,0,0.05);
   text-align:center;
 }
+.burger-icon{
+  stroke: var(--charcoal);
+}
