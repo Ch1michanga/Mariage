@@ -99,7 +99,16 @@ body.bg-kenburns::after{
   }
 }
 
-body > *{ position:relative; z-index:2; }
+/* IMPORTANT
+On ne met plus de z-index global sur body > *
+Sinon le menu mobile passe derrière certains contenus sur mobile
+On gère les couches explicitement ci dessous
+*/
+.page-content,
+.site-footer{
+  position:relative;
+  z-index:2;
+}
 
 /* Typographie */
 h1,h2,h3,.brand-title,.kicker{
@@ -130,7 +139,7 @@ a:hover{ color:var(--sage); }
 .site-header{
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:1000;
 
   display:flex;
   align-items:center;
@@ -233,6 +242,8 @@ a:hover{ color:var(--sage); }
   padding:10px;
   border-radius:10px;
   cursor:pointer;
+  position:relative;
+  z-index:4000;
 }
 
 .nav-toggle:focus-visible{
@@ -255,7 +266,7 @@ a:hover{ color:var(--sage); }
   position:fixed;
   inset:0;
   background:rgba(0,0,0,0.35);
-  z-index:90;
+  z-index:2500;
   display:none;
 }
 
@@ -566,7 +577,7 @@ button[type="submit"]:hover{
 
     transform:translateX(105%);
     transition:transform 260ms ease;
-    z-index:95;
+    z-index:3000;
 
     padding:72px 18px 22px;
     border-left:1px solid rgba(0,0,0,0.06);
@@ -622,8 +633,8 @@ button[type="submit"]:hover{
     transform:translateY(-6px) rotate(-45deg);
   }
 }
+
 /* Forcer une seule colonne pour Lieu et Hébergements */
 body.page-stack .grid-2{
   grid-template-columns:1fr;
 }
-
